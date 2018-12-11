@@ -1,8 +1,8 @@
-PROGRAM = Chess
-CC      = g++
-CFLAGS  = -I -Wall -Wextra -g
-LDFLAGS = -lGL -lGLU -lglut
-DEPS    = chessLogic.hpp
+PROGRAM   = Chess
+CC        = g++
+CXXFLAGS  = -I -Wall -Wextra -g -std=c++0x
+LDFLAGS   = -lGL -lGLU -lglut
+DEPS      = chessLogic.hpp
 
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)

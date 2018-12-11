@@ -3,7 +3,7 @@ namespace logic{
 		King,
 		Queen,
 		Bishop,
-		Rock,
+		Rook,
 		Knight,
 		Pawn
 	};
@@ -26,5 +26,16 @@ namespace logic{
 		bool onBoard;
 	} Piece;
 
+	typedef struct Field
+	{
+		Piece* piece;
+		bool underAttackByWhite;
+		bool underAttackByBlack;
+		filePos file;
+		int rank;
+	} Field;
+
 	void startGame();
+	int getPlayerToMove();
+	int movePiece(int fromFile, int fromRank, int toFile, int toRank);
 };
