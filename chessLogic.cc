@@ -110,21 +110,22 @@ void updateFieldsUnderAttack(){
 
 }
 
-// true  - moved
-// false - open check
-bool moveIfNoOpenCheck(logic::Piece selected, int destFile, int destRank){
+
+bool moveWouldOpenCheck(logic::Piece selected, int destFile, int destRank){
 	//TODO: move
 	updateFieldsUnderAttack();
 	logic::Piece w = white[King];
 	logic::Piece b = black[King];
 	if(playerToMove == logic::White && board[w.rank][w.file].underAttackByBlack){
 		//TODO: revert move
-		return false;
+		return true;
 	}
 	else if(playerToMove == logic::Black && board[b.rank][b.file].underAttackByWhite){
 		//TODO: revert move
-		return false;
+		return true;
 	}
+
+	//TODO: revert move
 }
 
 int abs(int x){
@@ -134,8 +135,86 @@ int abs(int x){
 		return x;
 }
 
-std::list<logic::Field> kingCanMoveTo(){
+bool friendlyPieceOnField(logic::Field field){
+	return (field.piece != nullptr && (field.piece)->color == playerToMove);
+}
 
+std::list<logic::Field> kingCanMoveTo(logic::Piece king){
+	std::list<logic::Field> res;
+	logic::Field destField; //fields that we can go to
+
+	//select adjecent fields
+	int posRank = king.rank;
+	int posFile = king.file;
+	int minFile, maxFile, minRank, maxRank;
+	if(posRank>0)minRank=posRank-1;
+	else minRank=0;
+	if(posRank<7)maxRank=posRank+1;
+	else maxRank=7;
+	if(posFile>0)minFile=posFile-1;
+	else minFile=0;
+	if(posFile<7)maxFile=posFile+1;
+	else maxFile=7;
+
+	//check which of them are legitimate moves
+	for(int i=minRank; i<=maxRank; i++){
+		for(int j=minFile; j<=maxFile; j++){
+
+			destField = board[i][j];
+			
+			//can't stand on top of your own piece or stay in place
+			if(friendlyPieceOnField(destField) || (posRank==i && posFile==j))
+				continue;
+
+			//if the king would not step into check
+			if(playerToMove == logic::White && !destField.underAttackByBlack){
+				res.push_back(destField);
+			}
+			if(playerToMove == logic::Black && !destField.underAttackByWhite){
+				res.push_back(destField);
+			}
+		}
+	}
+
+	//TODO: castling
+
+	return res;
+}
+
+std::list<logic::Field> queenCanMoveTo(logic::Piece queen){
+	std::list<logic::Field> res;
+	logic::Field destField; //fields that we can go to
+	
+	//moving horizontally
+	for(int i=queen.rank-1; i>0; i--){
+		destField = board[i][queen.file];
+		if(friendlyPieceOnField(destField) || moveWouldOpenCheck(queen, destField.file, destField.rank))
+			break;
+		res.push_back(destField);
+	}
+	for(int i=queen.rank+1; i<_RANKS; i++){
+		destField = board[i][queen.file];
+		if(friendlyPieceOnField(destField) || moveWouldOpenCheck(queen, destField.file, destField.rank))
+			break;
+		res.push_back(destField);
+	}
+
+	//moving vertically
+	for(int i=queen.file-1; i>0; i--){
+		destField = board[queen.rank][i];
+		if(friendlyPieceOnField(destField) || moveWouldOpenCheck(queen, destField.file, destField.rank))
+			break;
+		res.push_back(destField);
+	}
+	for(int i=queen.file+1; i<_FILES; i++){
+		destField = board[queen.rank][i];
+		if(friendlyPieceOnField(destField) || moveWouldOpenCheck(queen, destField.file, destField.rank))
+			break;
+		res.push_back(destField);
+	}
+
+	//moving diagonally
+	
 }
 
 /************************************
@@ -152,18 +231,7 @@ int getPlayerToMove(){
 }
 
 
-/* 0 - moved successfully
-** 1 - cannot move king to a field under attack
-** 2 - that piece does not move to that field
-** 3 - move would open check to self
-** 4 - castling over an attacked field
-** 5 - friendly piece on that field
-** 6 - pieces in the way
-** FOLLOWING SHOULDN'T HAPPPEN:
-** 7 - trying to move opponents piece
-** 8 - no piece selected
-**/
-int movePiece(int fromFile, int fromRank, int toFile, int toRank){
+void movePiece(int fromFile, int fromRank, int toFile, int toRank){
 	//needed to calculate legitimacy of some moves
 	int fileDiff = abs(fromFile - toFile);
 	int rankDiff = abs(fromRank - toRank);
@@ -172,96 +240,34 @@ int movePiece(int fromFile, int fromRank, int toFile, int toRank){
 	logic::Piece selectedP;
 	if(board[fromRank][fromFile].piece != nullptr)
 		selectedP = *(board[fromRank][fromFile].piece);
-	else
-		return 8;
 
 	//find the selected field on board
 	logic::Field destField = board[fromRank][fromFile];
 
-	//if a friendly piece is on the field, return regardless of the legitimacy of the move otherwise
-	if(destField.piece != nullptr && (destField.piece)->color == playerToMove)
-		return 5;
-
-	//trying to move opponent's piece
-	if(selectedP.color != playerToMove)
-		return 7;
+	//legitimate moves list
+	std::list<logic::Field> moves;
 
 	//move according to rules for each piece
 	switch(selectedP.type){
 		case logic::King:
-		{
-			//if it's one of the adjecent fields
-			if((rankDiff == 1 || fileDiff == 1) && (rankDiff+fileDiff)<=2){
-				//if the king would step into check
-				if(playerToMove == logic::White && destField.underAttackByBlack){
-					return 1;
-				}
-				if(playerToMove == logic::Black && destField.underAttackByWhite){
-					return 1;
-				}
-				//TODO: MOVE PIECE
-			}
-			//else if castling
-			else
-				return 2;
+			moves = kingCanMoveTo(selectedP);
 			break;
-		}
 		case logic::Queen:
-		{
-			//moving horizontally if it doesn't open check
-			if(fromRank == toRank){
-				//check if pieces are in the way
-				int tmp1, tmp2;
-				if(fromFile<toFile){tmp1=fromFile; tmp2=toFile;}
-				else			   {tmp1=toFile;   tmp2=fromFile;}
-				for(int i=tmp1+1; i<tmp2; i++){
-					if(board[fromRank][i].piece != nullptr)
-						return 6;
-				}
-				return moveIfNoOpenCheck(selectedP, toFile, toRank) ? 0 : 3;
-			}
-			//moving vertically if it doesn't open check
-			else if(fromFile == toFile){
-				//check if pieces are in the way
-				int tmp1, tmp2;
-				if(fromRank<toRank){tmp1=fromRank; tmp2=toRank;}
-				else			   {tmp1=toRank;   tmp2=fromRank;}
-				for(int i=tmp1+1; i<tmp2; i++){
-					if(board[i][fromFile].piece != nullptr)
-						return 6;
-				}
-				return moveIfNoOpenCheck(selectedP, toFile, toRank) ? 0 : 3;
-			}
-			//moving diagonally if it doesn't open check
-			else if(fileDiff==rankDiff){
-				//check if pieces are in the way
-
-				return moveIfNoOpenCheck(selectedP, toFile, toRank) ? 0 : 3;
-			}
-			//illegitimate move
-			else
-				return 2;
+			moves = queenCanMoveTo(selectedP);
 			break;
-		}
 		case logic::Bishop:
-		{
-
 			break;
-		}
 		case logic::Knight:
-		{
-
 			break;
-		}
 		case logic::Rook:
-		{
-
 			break;
-		}
 		case logic::Pawn:
-		{
-
 			break;
+	}
+
+	for (auto const& i : moves) {
+		if(i.file == destField.file && i.rank == destField.rank){
+			//TODO: move
 		}
 	}
 }
