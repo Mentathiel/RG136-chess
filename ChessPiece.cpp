@@ -2,8 +2,12 @@
 
 using namespace std;
 
-ChessPiece::ChessPiece(PlayerColor color, int file, int rank)
-                       : color(color), file(file), rank(rank) {}
+ChessPiece::ChessPiece(PlayerColor color, int file, int rank) : color(color) {
+    this->field = {file,rank};
+}
+
+ChessPiece::ChessPiece(PlayerColor color, Field field)
+                       : color(color), field(field) {}
 
 ostream& operator<<(ostream& out, const ChessPiece& cp)
 {
@@ -14,7 +18,7 @@ ostream& operator<<(ostream& out, const ChessPiece& cp)
 
     out << &cp.getName()[0] << " on ";
 
-    switch(cp.file){
+    switch(cp.field.file){
         case 0:
             out << "A";
             break;
@@ -41,7 +45,7 @@ ostream& operator<<(ostream& out, const ChessPiece& cp)
             break;
     }
 
-    out << cp.rank;
+    out << cp.field.rank;
 
     return out;
 }
