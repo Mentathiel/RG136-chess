@@ -1,12 +1,11 @@
 #include <GL/glut.h>
-#include "chessLogic.hpp"
+#include "chess.hpp"
 
 /* Declaring callback functions */
 static void onDisplay(void);
 
 int main(int argc, char **argv)
 {
-    logic::startGame();
 
     /* Initializing GLUT. */
     glutInit(&argc, argv);
