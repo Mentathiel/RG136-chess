@@ -2,13 +2,13 @@ PROGRAM   = Chess
 CC        = g++
 CXXFLAGS  = -I -Wall -Wextra -g -std=c++0x
 LDFLAGS   = -lGL -lGLU -lglut
-DEPS      = chessLogic.hpp
+DEPS      = chess.hpp
 
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-main: main.o chessLogic.o
-	$(CC) -o $(PROGRAM) main.o chessLogic.o $(LDFLAGS)
+main: main.o ChessPiece.o
+	$(CC) -o $(PROGRAM) main.o ChessPiece.o $(LDFLAGS)
 
 .PHONY: clean dist
 
