@@ -7,7 +7,7 @@ DEPS      = chess.hpp
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-main: main.o ChessPiece.o King.o Chessboard.o
+main: main.o Chessboard.o ChessPiece.o King.o Queen.o
 	$(CC) -o $(PROGRAM) main.o ChessPiece.o $(LDFLAGS)
 
 .PHONY: clean dist
