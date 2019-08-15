@@ -14,28 +14,36 @@ list<Field*> Queen::getPlayableMoves(Chessboard cb){
 	//moving horizontally
 	for(int i=this->field->rank-1; i>0; i--){
 		field = new Field(this->field->file, i);
-		if(!ChessPiece::fieldAttackedOrOccupied(*field,cb))
+		if(!ChessPiece::fieldAttackedOrOccupied(*field,cb)){
+			delete field;
 			break;
+		}
 		res.push_back(field);
 	}
 	for(int i=this->field->rank+1; i<8; i++){
 		field = new Field(this->field->file, i);
-		if(!ChessPiece::fieldAttackedOrOccupied(*field,cb))
+		if(!ChessPiece::fieldAttackedOrOccupied(*field,cb)){
+			delete field;
 			break;
+		}
 		res.push_back(field);
 	}
 
 	//moving vertically
 	for(int i=this->field->file-1; i>0; i--){
 		field = new Field(i, this->field->rank);
-		if(!ChessPiece::fieldAttackedOrOccupied(*field,cb))
+		if(!ChessPiece::fieldAttackedOrOccupied(*field,cb)){
+			delete field;
 			break;
+		}
 		res.push_back(field);
 	}
 	for(int i=this->field->file+1; i<8; i++){
 		field = new Field(i, this->field->rank);
-		if(!ChessPiece::fieldAttackedOrOccupied(*field,cb))
+		if(!ChessPiece::fieldAttackedOrOccupied(*field,cb)){
+			delete field;
 			break;
+		}
 		res.push_back(field);
 	}
 
@@ -50,16 +58,20 @@ list<Field*> Queen::getPlayableMoves(Chessboard cb){
 			field = new Field(this->field->file-i,i);
 			if(!ChessPiece::friendlyPieceOnField(*field,cb))
 				res.push_back(field);
-			else
+			else{
+				delete field;
 				pieceLeft = true;
+			}
 		}
 
 		if(this->field->file+i < 8 && !pieceRight){
 			field = new Field(this->field->file+i,i);
 			if(!(ChessPiece::friendlyPieceOnField(*field,cb)))
 				res.push_back(field);
-			else
+			else{
+				delete field;
 				pieceRight = true;
+			}
 		}
 	}
 
@@ -71,16 +83,20 @@ list<Field*> Queen::getPlayableMoves(Chessboard cb){
 			field = new Field(this->field->file-i,i);
 			if(!(ChessPiece::friendlyPieceOnField(*field,cb)))
 				res.push_back(field);
-			else
+			else{
+				delete field;
 				pieceLeft = true;
+			}
 		}
 
 		if(this->field->file+i < 8 && !pieceRight){
 			field = new Field(this->field->file+i,i);
 			if(!(ChessPiece::friendlyPieceOnField(*field,cb)))
 				res.push_back(field);
-			else
+			else{
+				delete field;
 				pieceRight = true;
+			}
 		}
 	}
 
@@ -89,12 +105,14 @@ list<Field*> Queen::getPlayableMoves(Chessboard cb){
 
 bool Queen::checkIfLegal(Field field, Chessboard cb){
 	list<Field*> playable = this->getPlayableMoves(cb);
+	bool res = false;
 	for(Field* move : playable){
 		if(*move == field){
-			return true;
+			res = true;
 		}
+		delete move;
 	}
-	return false;
+	return res;
 }
 
 //Utility

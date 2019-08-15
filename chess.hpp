@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <list>
 #include <algorithm>
+#include <typeinfo>
 
 using namespace std;
 
@@ -49,6 +50,7 @@ class ChessPiece {
 		//Fields
 		Field* field;
 		bool onBoard = true;
+		bool inStartingPos = true;
 
 		//Chess Related
 		virtual list<Field*> getPlayableMoves(Chessboard cb);

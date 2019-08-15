@@ -14,42 +14,72 @@ list<Field*> Rook::getPlayableMoves(Chessboard cb){
 	//moving horizontally
 	for(int i=this->field->rank-1; i>0; i--){
 		field = new Field(this->field->file, i);
-		if(!ChessPiece::fieldAttackedOrOccupied(*field,cb))
+		if(!ChessPiece::fieldAttackedOrOccupied(*field,cb)){
+			delete field;
 			break;
+		}
 		res.push_back(field);
 	}
 	for(int i=this->field->rank+1; i<8; i++){
 		field = new Field(this->field->file, i);
-		if(!ChessPiece::fieldAttackedOrOccupied(*field,cb))
+		if(!ChessPiece::fieldAttackedOrOccupied(*field,cb)){
+			delete field;
 			break;
+		}
 		res.push_back(field);
 	}
 
 	//moving vertically
 	for(int i=this->field->file-1; i>0; i--){
 		field = new Field(i, this->field->rank);
-		if(!ChessPiece::fieldAttackedOrOccupied(*field,cb))
+		if(!ChessPiece::fieldAttackedOrOccupied(*field,cb)){
+			delete field;
 			break;
+		}
 		res.push_back(field);
 	}
 	for(int i=this->field->file+1; i<8; i++){
 		field = new Field(i, this->field->rank);
-		if(!ChessPiece::fieldAttackedOrOccupied(*field,cb))
+		if(!ChessPiece::fieldAttackedOrOccupied(*field,cb)){
+			delete field;
 			break;
+		}
 		res.push_back(field);
 	}
+
+	//queen-side castle
+	field = new Field(2,0);
+	if(this->inStartingPos && field->file==2
+	   && cb.board[4][0] != nullptr
+	   && typeid(*cb.board[5][0])==typeid(King)
+	   && cb.board[4][0]->inStartingPos){
+		res.push_back(field);
+	}
+	else delete field;
+
+	//king-side castle
+	field = new Field(5,0);
+	if(this->inStartingPos && field->file==5
+	   && cb.board[4][0] != nullptr
+	   && typeid(*cb.board[5][0])==typeid(King)
+	   && cb.board[4][0]->inStartingPos){
+		res.push_back(field);
+	}
+	else delete field;
 
 	return res;
 }
 
 bool Rook::checkIfLegal(Field field, Chessboard cb){
 	list<Field*> playable = this->getPlayableMoves(cb);
+	bool res = false;
 	for(Field* move : playable){
 		if(*move == field){
-			return true;
+			res = true;
 		}
+		delete move;
 	}
-	return false;
+	return res;
 }
 
 //Utility

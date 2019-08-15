@@ -21,16 +21,20 @@ list<Field*> Bishop::getPlayableMoves(Chessboard cb){
 			field = new Field(this->field->file-i,i);
 			if(!ChessPiece::friendlyPieceOnField(*field,cb))
 				res.push_back(field);
-			else
+			else{
+				delete field;
 				pieceLeft = true;
+			}
 		}
 
 		if(this->field->file+i < 8 && !pieceRight){
 			field = new Field(this->field->file+i,i);
 			if(!(ChessPiece::friendlyPieceOnField(*field,cb)))
 				res.push_back(field);
-			else
+			else{
+				delete field;
 				pieceRight = true;
+			}
 		}
 	}
 
@@ -42,16 +46,20 @@ list<Field*> Bishop::getPlayableMoves(Chessboard cb){
 			field = new Field(this->field->file-i,i);
 			if(!(ChessPiece::friendlyPieceOnField(*field,cb)))
 				res.push_back(field);
-			else
+			else{
+				delete field;
 				pieceLeft = true;
+			}
 		}
 
 		if(this->field->file+i < 8 && !pieceRight){
 			field = new Field(this->field->file+i,i);
 			if(!(ChessPiece::friendlyPieceOnField(*field,cb)))
 				res.push_back(field);
-			else
+			else{
+				delete field;
 				pieceRight = true;
+			}
 		}
 	}
 
@@ -60,12 +68,14 @@ list<Field*> Bishop::getPlayableMoves(Chessboard cb){
 
 bool Bishop::checkIfLegal(Field field, Chessboard cb){
 	list<Field*> playable = this->getPlayableMoves(cb);
+	bool res = false;
 	for(Field* move : playable){
 		if(*move == field){
-			return true;
+			res = true;
 		}
+		delete move;
 	}
-	return false;
+	return res;
 }
 
 //Utility

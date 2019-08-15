@@ -16,6 +16,7 @@ list<Field*> Knight::getPlayableMoves(Chessboard cb){
 			if(checkIfLegal(*field, cb)){
 				res.push_back(field);
 			}
+			else delete field;
 		}
 	}
 	return res;
