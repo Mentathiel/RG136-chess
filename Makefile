@@ -9,7 +9,7 @@ PIECES    = ChessPiece.o King.o Queen.o Rook.o Bishop.o Knight.o Pawn.o
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 main: main.o Chessboard.o $(PIECES)
-	$(CC) -o $(PROGRAM) main.o $(PIECES) $(LDFLAGS)
+	$(CC) -o $(PROGRAM) main.o Chessboard.o $(PIECES) $(LDFLAGS)
 
 .PHONY: clean dist
 

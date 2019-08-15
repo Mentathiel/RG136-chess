@@ -14,11 +14,11 @@ ChessPiece::ChessPiece(PlayerColor color, Field* field)
 ostream& operator<<(ostream& out, const ChessPiece& cp)
 {
     if(cp.getColor() == PlayerColor::White)
-        out << "White ";
+        out << "W";
     else
-        out << "Black ";
+        out << "B";
 
-    out << &cp.getName()[0] << " on ";
+    out << cp.toString();
 
     switch(cp.field->file){
         case 0:
@@ -47,7 +47,7 @@ ostream& operator<<(ostream& out, const ChessPiece& cp)
             break;
     }
 
-    out << cp.field->rank;
+    out << cp.field->rank + 1 << " ";
 
     return out;
 }
