@@ -5,11 +5,10 @@ using namespace std;
 ChessPiece::ChessPiece() : color(PlayerColor::White) {}
 
 ChessPiece::ChessPiece(PlayerColor color, int file, int rank) : color(color) {
-    //HACK: Leaking memory
-    this->field = *(new Field(file,rank));
+    this->field = new Field(file,rank);
 }
 
-ChessPiece::ChessPiece(PlayerColor color, Field field)
+ChessPiece::ChessPiece(PlayerColor color, Field* field)
                        : color(color), field(field) {}
 
 ostream& operator<<(ostream& out, const ChessPiece& cp)
@@ -21,7 +20,7 @@ ostream& operator<<(ostream& out, const ChessPiece& cp)
 
     out << &cp.getName()[0] << " on ";
 
-    switch(cp.field.file){
+    switch(cp.field->file){
         case 0:
             out << "A";
             break;
@@ -48,9 +47,28 @@ ostream& operator<<(ostream& out, const ChessPiece& cp)
             break;
     }
 
-    out << cp.field.rank;
+    out << cp.field->rank;
 
     return out;
+}
+
+bool ChessPiece::friendlyPieceOnField(Field field, Chessboard cb){
+
+    if(this->color == PlayerColor::White && cb.board[field.file][field.rank] != nullptr){
+            if(cb.board[field.file][field.rank]->getColor() == this->color)
+                return true;
+            else 
+                return false;
+    }
+
+    else if(this->color == PlayerColor::Black && cb.board[field.file][field.rank] != nullptr){
+            if(cb.board[field.file][field.rank]->getColor() == this->color)
+                return true;
+            else 
+                return false;
+    }
+
+    return false;
 }
 
 bool ChessPiece::fieldAttackedOrOccupied(Field field, Chessboard cb){

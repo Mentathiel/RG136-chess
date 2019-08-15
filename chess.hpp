@@ -44,15 +44,16 @@ class ChessPiece {
 		//Constructors
 		ChessPiece();
 		ChessPiece(PlayerColor color, int file, int rank);
-		ChessPiece(PlayerColor color, Field field);
+		ChessPiece(PlayerColor color, Field* field);
 
 		//Fields
-		Field field;
+		Field* field;
 		bool onBoard = true;
 
 		//Chess Related
 		virtual list<Field*> getPlayableMoves(Chessboard cb);
 		virtual bool checkIfLegal(Field field);
+		bool friendlyPieceOnField(Field field, Chessboard cb);
 		bool fieldAttackedOrOccupied(Field field, Chessboard cb);
 
 		//Getters
@@ -94,7 +95,7 @@ class King : public ChessPiece {
 	public:
 		//Constructors
 		King(PlayerColor color, int file, int rank);
-		King(PlayerColor color, Field field);
+		King(PlayerColor color, Field* field);
 
 		//Chess Related
 		list<Field*> getPlayableMoves(Chessboard cb);
@@ -108,7 +109,7 @@ class Queen : public ChessPiece {
 	public:
 		//Constructors
 		Queen(PlayerColor color, int file, int rank);
-		Queen(PlayerColor color, Field field);
+		Queen(PlayerColor color, Field* field);
 
 		//Chess Related
 		list<Field*> getPlayableMoves(Chessboard cb);
@@ -122,7 +123,7 @@ class Rook : public ChessPiece {
 	public:
 		//Constructors
 		Rook(PlayerColor color, int file, int rank);
-		Rook(PlayerColor color, Field field);
+		Rook(PlayerColor color, Field* field);
 
 		//Chess Related
 		list<Field*> getPlayableMoves(Chessboard cb);
@@ -136,7 +137,7 @@ class Knight : public ChessPiece {
 	public:
 		//Constructors
 		Knight(PlayerColor color, int file, int rank);
-		Knight(PlayerColor color, Field field);
+		Knight(PlayerColor color, Field* field);
 
 		//Chess Related
 		list<Field*> getPlayableMoves(Chessboard cb);
@@ -150,7 +151,7 @@ class Bishop : public ChessPiece {
 	public:
 		//Constructors
 		Bishop(PlayerColor color, int file, int rank);
-		Bishop(PlayerColor color, Field field);
+		Bishop(PlayerColor color, Field* field);
 
 		//Chess Related
 		list<Field*> getPlayableMoves(Chessboard cb);
@@ -164,7 +165,7 @@ class Pawn : public ChessPiece {
 	public:
 		//Constructors
 		Pawn(PlayerColor color, int file, int rank);
-		Pawn(PlayerColor color, Field field);
+		Pawn(PlayerColor color, Field* field);
 
 		//Chess Related
 		list<Field*> getPlayableMoves(Chessboard cb);
