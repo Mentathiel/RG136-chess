@@ -7,8 +7,8 @@ DEPS      = chess.hpp
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-main: main.o Chessboard.o ChessPiece.o King.o Queen.o
-	$(CC) -o $(PROGRAM) main.o ChessPiece.o $(LDFLAGS)
+main: main.o Chessboard.o ChessPiece.o King.o Queen.o Rook.o
+	$(CC) -o $(PROGRAM) main.o ChessPiece.o King.o Queen.o Rook.o $(LDFLAGS)
 
 .PHONY: clean dist
 
