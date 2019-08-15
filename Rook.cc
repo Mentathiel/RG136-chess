@@ -54,6 +54,6 @@ bool Rook::checkIfLegal(Field field, Chessboard cb){
 
 //Utility
 string Rook::toString() const{
-	string res = "Q";
+	string res = "R";
 	return res;
 }

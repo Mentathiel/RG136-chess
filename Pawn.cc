@@ -43,6 +43,6 @@ bool Pawn::checkIfLegal(Field field, Chessboard cb){
 
 //Utility
 string Pawn::toString() const{
-	string res = "Q";
+	string res = "p";
 	return res;
 }

@@ -70,6 +70,6 @@ bool Bishop::checkIfLegal(Field field, Chessboard cb){
 
 //Utility
 string Bishop::toString() const{
-	string res = "Q";
+	string res = "B";
 	return res;
 }

@@ -33,6 +33,6 @@ bool Knight::checkIfLegal(Field field, Chessboard cb){
 
 //Utility
 string Knight::toString() const{
-	string res = "Q";
+	string res = "N";
 	return res;
 }
