@@ -83,6 +83,7 @@ class Chessboard {
 		ChessPiece* board[8][8];
 		bool attackedByWhite[8][8];
 		bool attackedByBlack[8][8];
+		ChessPiece* pawnMovedLast = nullptr;
 		void print() const;
 
 	private:
