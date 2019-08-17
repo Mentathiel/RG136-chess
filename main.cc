@@ -6,10 +6,6 @@ static void onDisplay(void);
 
 int main(int argc, char **argv)
 {
-    Chessboard* pcb = new Chessboard();
-    Chessboard cb = *pcb;
-    cb.print();
-    delete pcb;
 
     /* Initializing GLUT. */
     glutInit(&argc, argv);

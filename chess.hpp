@@ -9,36 +9,53 @@
 using namespace std;
 
 class Chessboard;
+class ChessPiece;
 
 enum PlayerColor{
 	White,
 	Black
 };
 
-typedef struct Field {
-	Field(){}
-	Field(int file, int rank) : file(file), rank(rank){}
+class Field {
+	public:
+		Field(){}
+		Field(int file, int rank) : file(file), rank(rank){}
 
-	int file;
-	int rank;
+		int file;
+		int rank;
 
-	bool operator==(const Field& a){
-		Field b = *this;
-	    if(a.file == b.file && a.rank == b.rank)
-	    	return true;
-	    else
-	    	return false;
-	}
+		string toString(void);
 
-	bool operator!=(const Field& a){
-		Field b = *this;
-		if(a.file == b.file && a.rank == b.rank)
-			return false;
-		else
-			return true;
-	}
+		static string fileName(int n);
 
-} Field;
+		bool operator==(const Field& a){
+			Field b = *this;
+		    if(a.file == b.file && a.rank == b.rank)
+		    	return true;
+		    else
+		    	return false;
+		}
+
+		bool operator!=(const Field& a){
+			Field b = *this;
+			if(a.file == b.file && a.rank == b.rank)
+				return false;
+			else
+				return true;
+		}
+};
+
+class Move{
+	public:
+		Move(Field* dest, ChessPiece* moving, Chessboard cb);
+
+		Field* from;
+		Field* dest;
+		ChessPiece* moving;
+		ChessPiece* eaten = nullptr;
+
+		string toString(void);
+};
 
 class ChessPiece {
 	public:
@@ -59,12 +76,12 @@ class ChessPiece {
 		bool fieldAttackedOrOccupied(Field field, Chessboard cb);
 
 		//Getters
-		PlayerColor getColor() const;
-		string getName() const;
+		PlayerColor getColor(void) const;
+		string getName(void) const;
 		
 		//Utility
-		void print() const;
-		virtual string toString() const;
+		void print(void) const;
+		virtual string toString(void) const;
 		
 
 
@@ -86,11 +103,11 @@ class Chessboard {
 		bool attackedByWhite[8][8];
 		bool attackedByBlack[8][8];
 		ChessPiece* pawnMovedLast = nullptr;
-		void print() const;
+		void print(void) const;
 
 	private:
-		void updateAttacked();
-		void initializeBoard();
+		void updateAttacked(void);
+		void initializeBoard(void);
 };
 
 
@@ -105,7 +122,7 @@ class King : public ChessPiece {
 		bool checkIfLegal(Field field, Chessboard cb);
 
 		//Utility
-		string toString() const;
+		string toString(void) const;
 };
 
 class Queen : public ChessPiece {
@@ -119,7 +136,7 @@ class Queen : public ChessPiece {
 		bool checkIfLegal(Field field, Chessboard cb);
 
 		//Utility
-		string toString() const;
+		string toString(void) const;
 };
 
 class Rook : public ChessPiece {
@@ -133,7 +150,7 @@ class Rook : public ChessPiece {
 		bool checkIfLegal(Field field, Chessboard cb);
 
 		//Utility
-		string toString() const;
+		string toString(void) const;
 };
 
 class Knight : public ChessPiece {
@@ -147,7 +164,7 @@ class Knight : public ChessPiece {
 		bool checkIfLegal(Field field, Chessboard cb);
 
 		//Utility
-		string toString() const;
+		string toString(void) const;
 };
 
 class Bishop : public ChessPiece {
@@ -161,7 +178,7 @@ class Bishop : public ChessPiece {
 		bool checkIfLegal(Field field, Chessboard cb);
 
 		//Utility
-		string toString() const;
+		string toString(void) const;
 };
 
 class Pawn : public ChessPiece {
@@ -175,5 +192,5 @@ class Pawn : public ChessPiece {
 		bool checkIfLegal(Field field, Chessboard cb);
 
 		//Utility
-		string toString() const;
+		string toString(void) const;
 };
