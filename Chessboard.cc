@@ -22,6 +22,8 @@ void Chessboard::print() const{
 void Chessboard::updateAttacked(){}
 
 void Chessboard::initializeBoard(){
+	toMove = PlayerColor::White;
+
 	for(int i=0; i<8; i++){
 		for(int j=0; j<8; j++){
 			this->board[i][j] = nullptr;

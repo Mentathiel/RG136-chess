@@ -8,12 +8,37 @@
 
 using namespace std;
 
+class Field;
+class Move;
 class Chessboard;
 class ChessPiece;
+class King;
+class Queen;
+class Rook;
+class Knight;
+class Bishop;
+class Pawn;
 
 enum PlayerColor{
 	White,
 	Black
+};
+
+class Game{
+	public:
+		Game();
+		Game(Chessboard* cb);
+		
+		Chessboard* cb;
+
+		void playMove(Move* move);
+		void playMove(Field* dest, ChessPiece* moving);
+
+		Move undoMove(void);
+
+	private:
+		list<Move*> moveHistory;
+		//TODO: hashmap with previous positions
 };
 
 class Field {
@@ -71,7 +96,7 @@ class ChessPiece {
 
 		//Chess Related
 		virtual list<Field*> getPlayableMoves(Chessboard cb);
-		virtual bool checkIfLegal(Field field);
+		virtual bool checkIfLegal(Field field, Chessboard cb);
 		bool friendlyPieceOnField(Field field, Chessboard cb);
 		bool fieldAttackedOrOccupied(Field field, Chessboard cb);
 
@@ -83,8 +108,6 @@ class ChessPiece {
 		void print(void) const;
 		virtual string toString(void) const;
 		
-
-
 	protected:
 		//Fields
 		const PlayerColor color;
@@ -103,10 +126,11 @@ class Chessboard {
 		bool attackedByWhite[8][8];
 		bool attackedByBlack[8][8];
 		ChessPiece* pawnMovedLast = nullptr;
+		PlayerColor toMove;
 		void print(void) const;
+		void updateAttacked(void);
 
 	private:
-		void updateAttacked(void);
 		void initializeBoard(void);
 };
 

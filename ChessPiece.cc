@@ -113,7 +113,7 @@ list<Field*> ChessPiece::getPlayableMoves(Chessboard cb){
     return li;
 }
 
-bool ChessPiece::checkIfLegal(Field field){
+bool ChessPiece::checkIfLegal(Field field, Chessboard cb){
     return false;
 }
 

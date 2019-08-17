@@ -7,6 +7,18 @@ static void onDisplay(void);
 int main(int argc, char **argv)
 {
 
+    Game* game = new Game();
+    game->cb->print();
+    cout << endl << endl << endl;
+    Field* f = new Field(0,3);
+    ChessPiece* cp = game->cb->board[0][1];
+    game->playMove(f,cp);
+    game->cb->print();
+    game->undoMove();
+
+    cout << endl << endl << endl;
+    game->cb->print();
+
     /* Initializing GLUT. */
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
