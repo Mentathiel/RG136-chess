@@ -44,3 +44,19 @@ string Field::toString(){
 
 	return res;
 }
+
+bool Field::operator==(const Field& a){
+	Field b = *this;
+    if(a.file == b.file && a.rank == b.rank)
+    	return true;
+    else
+    	return false;
+}
+
+bool Field::operator!=(const Field& a){
+	Field b = *this;
+	if(a.file == b.file && a.rank == b.rank)
+		return false;
+	else
+		return true;
+}

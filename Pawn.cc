@@ -8,6 +8,7 @@ Pawn::Pawn(PlayerColor color, Field* field) : ChessPiece(color,field){}
 //Chess Related
 list<Field*> Pawn::getPlayableMoves(Chessboard cb){
 	//TODO: Move would open check
+
 	list<Field*> res;
 	Field* field;
 	for(int i=0; i<8; i++){
@@ -46,4 +47,9 @@ bool Pawn::checkIfLegal(Field field, Chessboard cb){
 string Pawn::toString() const{
 	string res = "p";
 	return res;
+}
+
+//Display
+void Pawn::display(int file, int rank){
+
 }

@@ -120,3 +120,8 @@ string Queen::toString() const{
 	string res = "Q";
 	return res;
 }
+
+//Display
+void Queen::display(int file, int rank){
+
+}

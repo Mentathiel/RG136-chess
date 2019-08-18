@@ -87,3 +87,8 @@ string Rook::toString() const{
 	string res = "R";
 	return res;
 }
+
+//Display
+void Rook::display(int file, int rank){
+
+}

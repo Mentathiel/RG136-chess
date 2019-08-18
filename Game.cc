@@ -8,6 +8,38 @@ Game::Game(Chessboard* cb){
 	this->cb = cb;
 }
 
+bool Game::checkForMate(){
+	//TODO
+	return false;
+}
+
+bool Game::checkForDraw(){
+	//Stalemate
+	for(int i=0; i<8; i++){
+		for(int j=0; j<8; j++){
+			if(cb->board[i][j] != nullptr
+			   && typeid(*cb->board[i][j]) == typeid(King)
+			   && cb->board[i][j]->getColor() == cb->toMove){
+			   	//TODO: Check if surrounding is attacked/occupied
+			   	//without king being under check
+				break;
+			}
+		}
+	}
+
+	//TODO: Threefold repetition
+
+	//75 move rule
+	if(movesSinceCapturePawnMove >= 75)
+		return true;
+
+	//TODO: Insufficient material
+	/*king versus king
+	  king and bishop versus king
+	  king and knight versus king
+	  king and bishop versus king and bishop with the bishops on the same color.*/
+}
+
 void Game::playMove(Move* move){
 	if(move->moving->checkIfLegal(*move->dest, *cb)){
 		cb->board[move->from->file][move->from->rank] = nullptr;
@@ -16,6 +48,17 @@ void Game::playMove(Move* move){
 						   new Field(move->dest->file,move->dest->rank));
 		cb->updateAttacked();
 		moveHistory.push_back(move);
+
+		if(typeid(*move->moving) != typeid(Pawn))
+			movesSinceCapturePawnMove++;
+		else
+			movesSinceCapturePawnMove = 0;
+
+		if(checkForDraw()){
+			//TODO: draw
+			//HACK: using playMove to check for opened check
+			//can end the game with a draw a move early
+		}
 	}
 	else{
 		//the move is illegal and won't be played
@@ -37,4 +80,17 @@ Move Game::undoMove(void){
 		cb->updateAttacked();
 		moveHistory.pop_back();
 	}
+}
+
+void Game::display(int file, int rank){
+	cb->display(file, rank);
+
+/*
+	for(int i=0; i<8; i++){
+		for(int j=0; j<8; j++){
+			if(cb->board[i][j] != nullptr){
+				cb->board[i][j]->display(posX,posY,i,j,width/8);
+			}
+		}
+	}*/
 }

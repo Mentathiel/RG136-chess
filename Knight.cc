@@ -37,3 +37,8 @@ string Knight::toString() const{
 	string res = "N";
 	return res;
 }
+
+//Display
+void Knight::display(int file, int rank){
+
+}

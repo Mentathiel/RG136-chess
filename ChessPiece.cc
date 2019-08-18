@@ -117,6 +117,14 @@ bool ChessPiece::checkIfLegal(Field field, Chessboard cb){
     return false;
 }
 
+bool ChessPiece::checkIfLegal(Move* move, Chessboard cb){
+    this->checkIfLegal(*move->dest, cb);
+}
+
 string ChessPiece::toString() const{
     return "";
+}
+
+void ChessPiece::display(int file, int rank){
+
 }

@@ -19,7 +19,31 @@ void Chessboard::print() const{
 
 }
 
-void Chessboard::updateAttacked(){}
+void Chessboard::updateAttacked(){
+	for(int i=0; i<8; i++){
+		for(int j=0; j<8; j++){
+			attackedByWhite[i][j] = false;
+			attackedByBlack[i][j] = false;		
+		}
+	}
+
+	for(int i=0; i<8; i++){
+		for(int j=0; j<8; j++){
+			if(board[i][j] != nullptr){
+				list<Field*> li = board[i][j]->getPlayableMoves(*this);
+				for(Field* f : li){
+					if(board[i][j]->getColor() == PlayerColor::White){
+						attackedByWhite[f->file][f->rank] = true;
+					}
+					else{
+						attackedByBlack[f->file][f->rank] = true;
+					}
+					delete f;
+				}
+			}
+		}
+	}
+}
 
 void Chessboard::initializeBoard(){
 	toMove = PlayerColor::White;
@@ -61,4 +85,159 @@ void Chessboard::initializeBoard(){
 	//initializing kings
 	board[4][0] = new King(PlayerColor::White, 4, 0);
 	board[4][7] = new King(PlayerColor::Black, 4, 7);
+}
+
+
+/*
+		ChessPiece* board[8][8];
+		bool attackedByWhite[8][8];
+		bool attackedByBlack[8][8];
+		ChessPiece* pawnMovedLast = nullptr;
+		PlayerColor toMove;
+*/
+
+bool Chessboard::operator==(const Chessboard& a){
+	if(typeid(*this->pawnMovedLast) != typeid(*a.pawnMovedLast)
+	   || this->toMove != a.toMove)
+		return false;
+
+	for(int i=0; i<8; i++){
+		for(int j=0; j<8; j++){
+			if(typeid(*this->board[i][j]) != typeid(*a.board[i][j])
+			   || this->attackedByWhite[i][j] != a.attackedByWhite[i][j]
+			   || this->attackedByBlack[i][j] != a.attackedByBlack[i][j])
+				return false;
+		}
+	}
+
+	return true;
+}
+
+
+bool Chessboard::operator!=(const Chessboard& a){
+	if(typeid(*this->pawnMovedLast) != typeid(*a.pawnMovedLast)
+	   || this->toMove != a.toMove)
+		return true;
+
+	for(int i=0; i<8; i++){
+		for(int j=0; j<8; j++){
+			if(typeid(*this->board[i][j]) != typeid(*a.board[i][j])
+			   || this->attackedByWhite[i][j] != a.attackedByWhite[i][j]
+			   || this->attackedByBlack[i][j] != a.attackedByBlack[i][j])
+				return true;
+		}
+	}
+
+	return false;
+}
+
+void Chessboard::display(int file, int rank){
+	/*LOWER LEFT*/
+	for(int i=4; i>0; i--){
+		for(int j=4; j>0; j--){
+		    glPushMatrix();
+
+		    if((i-1)==file && (j-1)==rank){
+		    	glColor3f( 0.4, 0.3, 0.2 );
+		    }
+		    else if((i-j)%2==0){
+			    glColor3f( 0.2, 0.1, 0 );
+
+			}
+			else{
+				glColor3f( 0.8, 0.7, 0.6 );
+			}
+		    glTranslatef(-4.5+i, -4.5+j, 10);
+		    glutSolidCube(1);		    
+		    glPopMatrix();
+		}
+	}
+	//upper right
+	for(int i=4; i<8; i++){
+		for(int j=4; j<8; j++){
+		    glPushMatrix();
+
+		    if(i==file && j==rank){
+		    	glColor3f( 0.4, 0.3, 0.2 );
+		    }
+		    else if((i-j)%2==0){
+			    glColor3f( 0.2, 0.1, 0 );
+
+			}
+			else{
+				glColor3f( 0.8, 0.7, 0.6 );
+			}
+		    glTranslatef(-3.5+i, -3.5+j, 10);
+		    glutSolidCube(1);		    
+		    glPopMatrix();
+		}
+	}
+
+	//lower right
+	for(int i=4; i<8; i++){
+		for(int j=4; j>0; j--){
+		    glPushMatrix();
+
+		    if(i==file && (j-1)==rank){
+		    	glColor3f( 0.4, 0.3, 0.2 );
+		    }
+		    else if((i-j)%2==0){
+		    	glColor3f( 0.8, 0.7, 0.6 );
+
+			}
+			else{
+				glColor3f( 0.2, 0.1, 0 );
+			}
+		    glTranslatef(-3.5+i, -4.5+j, 10);
+		    glutSolidCube(1);		    
+		    glPopMatrix();
+		}
+	}
+
+	//upper left
+	for(int i=4; i>0; i--){
+		for(int j=4; j<8; j++){
+		    glPushMatrix();
+
+		    if((i-1)==file && j==rank){
+		    	glColor3f( 0.4, 0.3, 0.2 );
+		    }
+		    else if((i-j)%2==0){
+				glColor3f( 0.8, 0.7, 0.6 );
+			}
+			else{
+				glColor3f( 0.2, 0.1, 0 );
+			}
+		    glTranslatef(-4.5+i, -3.5+j, 10);
+		    glutSolidCube(1);		    
+		    glPopMatrix();
+		}
+	}
+
+	glColor3f( 0.01, 0.01, 0.01 );
+	glBegin( GL_QUADS );
+		//left
+		glVertex3f(-4.0, -4.0, 9.5);
+		glVertex3f(-3.5, -4.0, 9.5);
+		glVertex3f(-3.5,  3.5, 9.5);
+		glVertex3f(-4.0,  3.5, 9.5);
+
+		//right
+		glVertex3f(3.5, -4.0, 9.5);
+		glVertex3f(4.0, -4.0, 9.5);
+		glVertex3f(4.0,  3.5, 9.5);
+		glVertex3f(3.5,  3.5, 9.5);	
+
+		//bottom
+		glVertex3f(-4.0, -4.0, 9.5);
+		glVertex3f( 4.0, -4.0, 9.5);
+		glVertex3f( 4.0, -3.5, 9.5);
+		glVertex3f(-4.0, -3.5, 9.5);
+
+		//top
+		glVertex3f(-4.0, 3.5, 9.5);
+		glVertex3f( 4.0, 3.5, 9.5);
+		glVertex3f( 4.0, 4.0, 9.5);
+		glVertex3f(-4.0, 4.0, 9.5);	
+	glEnd();
 }

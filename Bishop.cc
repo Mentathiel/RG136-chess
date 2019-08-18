@@ -83,3 +83,8 @@ string Bishop::toString() const{
 	string res = "B";
 	return res;
 }
+
+//Display
+void Bishop::display(int file, int rank){
+
+}

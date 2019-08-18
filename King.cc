@@ -53,3 +53,8 @@ string King::toString() const{
 	string res = "K";
 	return res;
 }
+
+//Display
+void King::display(int file, int rank){
+
+}

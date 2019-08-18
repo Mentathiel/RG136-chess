@@ -5,6 +5,7 @@
 #include <list>
 #include <algorithm>
 #include <typeinfo>
+#include <GL/glut.h>
 
 using namespace std;
 
@@ -30,15 +31,21 @@ class Game{
 		Game(Chessboard* cb);
 		
 		Chessboard* cb;
+		int movesSinceCapturePawnMove = 0;
 
 		void playMove(Move* move);
 		void playMove(Field* dest, ChessPiece* moving);
 
 		Move undoMove(void);
 
+		bool checkForDraw();
+		bool checkForMate();
+
+		void display(int file, int rank);
+
 	private:
 		list<Move*> moveHistory;
-		//TODO: hashmap with previous positions
+		//TODO: unordered_map<Chessboard*, int> positionCount;
 };
 
 class Field {
@@ -53,21 +60,8 @@ class Field {
 
 		static string fileName(int n);
 
-		bool operator==(const Field& a){
-			Field b = *this;
-		    if(a.file == b.file && a.rank == b.rank)
-		    	return true;
-		    else
-		    	return false;
-		}
-
-		bool operator!=(const Field& a){
-			Field b = *this;
-			if(a.file == b.file && a.rank == b.rank)
-				return false;
-			else
-				return true;
-		}
+		bool operator==(const Field& a);
+		bool operator!=(const Field& a);
 };
 
 class Move{
@@ -97,8 +91,12 @@ class ChessPiece {
 		//Chess Related
 		virtual list<Field*> getPlayableMoves(Chessboard cb);
 		virtual bool checkIfLegal(Field field, Chessboard cb);
+		bool checkIfLegal(Move* move, Chessboard cb);
 		bool friendlyPieceOnField(Field field, Chessboard cb);
 		bool fieldAttackedOrOccupied(Field field, Chessboard cb);
+		
+		//Display
+		virtual void display(int file, int rank);
 
 		//Getters
 		PlayerColor getColor(void) const;
@@ -130,8 +128,13 @@ class Chessboard {
 		void print(void) const;
 		void updateAttacked(void);
 
+		//Display
+		virtual void display(int file, int rank);
+
 	private:
 		void initializeBoard(void);
+		bool operator==(const Chessboard& a);
+		bool operator!=(const Chessboard& a);
 };
 
 
@@ -144,6 +147,9 @@ class King : public ChessPiece {
 		//Chess Related
 		list<Field*> getPlayableMoves(Chessboard cb);
 		bool checkIfLegal(Field field, Chessboard cb);
+		
+		//Display
+		void display(int file, int rank);
 
 		//Utility
 		string toString(void) const;
@@ -158,6 +164,9 @@ class Queen : public ChessPiece {
 		//Chess Related
 		list<Field*> getPlayableMoves(Chessboard cb);
 		bool checkIfLegal(Field field, Chessboard cb);
+		
+		//Display
+		void display(int file, int rank);
 
 		//Utility
 		string toString(void) const;
@@ -172,6 +181,9 @@ class Rook : public ChessPiece {
 		//Chess Related
 		list<Field*> getPlayableMoves(Chessboard cb);
 		bool checkIfLegal(Field field, Chessboard cb);
+		
+		//Display
+		void display(int file, int rank);
 
 		//Utility
 		string toString(void) const;
@@ -186,6 +198,9 @@ class Knight : public ChessPiece {
 		//Chess Related
 		list<Field*> getPlayableMoves(Chessboard cb);
 		bool checkIfLegal(Field field, Chessboard cb);
+		
+		//Display
+		void display(int file, int rank);
 
 		//Utility
 		string toString(void) const;
@@ -201,6 +216,9 @@ class Bishop : public ChessPiece {
 		list<Field*> getPlayableMoves(Chessboard cb);
 		bool checkIfLegal(Field field, Chessboard cb);
 
+		//Display
+		void display(int file, int rank);
+
 		//Utility
 		string toString(void) const;
 };
@@ -214,6 +232,9 @@ class Pawn : public ChessPiece {
 		//Chess Related
 		list<Field*> getPlayableMoves(Chessboard cb);
 		bool checkIfLegal(Field field, Chessboard cb);
+
+		//Display
+		void display(int file, int rank);
 
 		//Utility
 		string toString(void) const;
