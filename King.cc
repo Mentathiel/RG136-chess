@@ -1,9 +1,15 @@
 #include "chess.hpp"
 
 //Constructors
-King::King(PlayerColor color, int file, int rank) : ChessPiece(color,file,rank){}
+King::King(PlayerColor color, int file, int rank) : ChessPiece(color,file,rank){
+	string str = "Pieces 3D/king.obj";
+	objHandler.loadModel(str.c_str());
+}
 
-King::King(PlayerColor color, Field* field) : ChessPiece(color,field){}
+King::King(PlayerColor color, Field* field) : ChessPiece(color,field){
+	string str = "Pieces 3D/king.obj";
+	objHandler.loadModel(str.c_str());
+}
 
 //Chess Related
 list<Field*> King::getPlayableMoves(Chessboard cb){
@@ -52,9 +58,4 @@ bool King::checkIfLegal(Field field, Chessboard cb){
 string King::toString() const{
 	string res = "K";
 	return res;
-}
-
-//Display
-void King::display(int file, int rank){
-
 }

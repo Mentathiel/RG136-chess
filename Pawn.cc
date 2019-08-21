@@ -1,9 +1,15 @@
 #include "chess.hpp"
 
 //Constructors
-Pawn::Pawn(PlayerColor color, int file, int rank) : ChessPiece(color,file,rank){}
+Pawn::Pawn(PlayerColor color, int file, int rank) : ChessPiece(color,file,rank){
+	string str = "Pieces 3D/pawn.obj";
+	objHandler.loadModel(str.c_str());
+}
 
-Pawn::Pawn(PlayerColor color, Field* field) : ChessPiece(color,field){}
+Pawn::Pawn(PlayerColor color, Field* field) : ChessPiece(color,field){
+	string str = "Pieces 3D/pawn.obj";
+	objHandler.loadModel(str.c_str());
+}
 
 //Chess Related
 list<Field*> Pawn::getPlayableMoves(Chessboard cb){
@@ -47,9 +53,4 @@ bool Pawn::checkIfLegal(Field field, Chessboard cb){
 string Pawn::toString() const{
 	string res = "p";
 	return res;
-}
-
-//Display
-void Pawn::display(int file, int rank){
-
 }

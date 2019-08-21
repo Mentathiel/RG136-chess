@@ -8,8 +8,8 @@ PIECES    = ChessPiece.o King.o Queen.o Rook.o Bishop.o Knight.o Pawn.o
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-main: main.o Chessboard.o Move.o Field.o Game.o $(PIECES)
-	$(CC) -o $(PROGRAM) main.o Chessboard.o Move.o Field.o Game.o $(PIECES) $(LDFLAGS)
+main: main.o Chessboard.o Move.o Field.o Game.o ObjHandler.o $(PIECES)
+	$(CC) -o $(PROGRAM) main.o Chessboard.o Move.o Field.o Game.o ObjHandler.o $(PIECES) $(LDFLAGS)
 
 .PHONY: clean dist
 

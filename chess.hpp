@@ -19,10 +19,37 @@ class Rook;
 class Knight;
 class Bishop;
 class Pawn;
+class ObjHandler;
 
 enum PlayerColor{
 	White,
 	Black
+};
+
+class ObjHandler{
+	public:
+		void loadModel(const char* fileName);
+
+		void draw();
+		
+		typedef struct Vector3f{
+			float x;
+			float y;
+			float z;
+		} Vector3f;
+
+		typedef struct Vector2f{
+			float x;
+			float y;
+		} Vector2f;
+
+	private:
+	    vector<Vector3f> vertices;
+	    //vector<Vector2f> textureOrd;
+        vector<int> indices;
+	    vector<Vector3f> normalsOrd;
+
+		static vector<int> tokenizeF(string s);
 };
 
 class Game{
@@ -87,6 +114,7 @@ class ChessPiece {
 		Field* field;
 		bool onBoard = true;
 		bool inStartingPos = true;
+		ObjHandler objHandler;
 
 		//Chess Related
 		virtual list<Field*> getPlayableMoves(Chessboard cb);
@@ -96,7 +124,7 @@ class ChessPiece {
 		bool fieldAttackedOrOccupied(Field field, Chessboard cb);
 		
 		//Display
-		virtual void display(int file, int rank);
+		void display(int file, int rank);
 
 		//Getters
 		PlayerColor getColor(void) const;

@@ -1,9 +1,15 @@
 #include "chess.hpp"
 
 //Constructors
-Bishop::Bishop(PlayerColor color, int file, int rank) : ChessPiece(color,file,rank){}
+Bishop::Bishop(PlayerColor color, int file, int rank) : ChessPiece(color,file,rank){
+	string str = "Pieces 3D/bishop.obj";
+	objHandler.loadModel(str.c_str());
+}
 
-Bishop::Bishop(PlayerColor color, Field* field) : ChessPiece(color,field){}
+Bishop::Bishop(PlayerColor color, Field* field) : ChessPiece(color,field){
+	string str = "Pieces 3D/bishop.obj";
+	objHandler.loadModel(str.c_str());
+}
 
 //Chess Related
 list<Field*> Bishop::getPlayableMoves(Chessboard cb){
@@ -82,9 +88,4 @@ bool Bishop::checkIfLegal(Field field, Chessboard cb){
 string Bishop::toString() const{
 	string res = "B";
 	return res;
-}
-
-//Display
-void Bishop::display(int file, int rank){
-
 }

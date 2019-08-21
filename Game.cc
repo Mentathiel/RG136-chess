@@ -85,12 +85,12 @@ Move Game::undoMove(void){
 void Game::display(int file, int rank){
 	cb->display(file, rank);
 
-/*
+
 	for(int i=0; i<8; i++){
 		for(int j=0; j<8; j++){
 			if(cb->board[i][j] != nullptr){
-				cb->board[i][j]->display(posX,posY,i,j,width/8);
+				cb->board[i][j]->display(i,j);
 			}
 		}
-	}*/
+	}
 }

@@ -1,9 +1,15 @@
 #include "chess.hpp"
 
 //Constructors
-Queen::Queen(PlayerColor color, int file, int rank) : ChessPiece(color,file,rank){}
+Queen::Queen(PlayerColor color, int file, int rank) : ChessPiece(color,file,rank){
+	string str = "Pieces 3D/queen.obj";
+	objHandler.loadModel(str.c_str());
+}
 
-Queen::Queen(PlayerColor color, Field* field) : ChessPiece(color,field){}
+Queen::Queen(PlayerColor color, Field* field) : ChessPiece(color,field){
+	string str = "Pieces 3D/queen.obj";
+	objHandler.loadModel(str.c_str());
+}
 
 //Chess Related
 list<Field*> Queen::getPlayableMoves(Chessboard cb){

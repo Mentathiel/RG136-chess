@@ -56,7 +56,6 @@ static void onDisplay(void)
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-
     gluLookAt(
         0, 0, 1,
         0, 0, 0,
@@ -65,6 +64,7 @@ static void onDisplay(void)
 
     /* This is where the magic happens */
     game->display(selFieldFile, selFieldRank);
+
 
     /* Swap Buffer with the new one */
     glutSwapBuffers();
