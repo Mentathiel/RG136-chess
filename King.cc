@@ -25,7 +25,7 @@ bool King::checkIfLegal(Field field, Chessboard cb){
 	if(abs(this->field->rank - field.rank) <= 1 
 	   && abs(this->field->file - field.file) <= 1 
 	   && *(this->field) != field 
-	   && !fieldAttackedOrOccupied(field,cb)){
+	   && !ChessPiece::fieldAttackedOrOccupied(field,cb)){
 		return true;
 	}
 	
@@ -46,6 +46,10 @@ bool King::checkIfLegal(Field field, Chessboard cb){
 	}
 
 	return false;
+}
+
+ChessPiece* King::movedPiece(PlayerColor color, Field* dest){
+    return new King(color, dest);
 }
 
 //Utility

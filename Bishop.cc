@@ -13,53 +13,63 @@ list<Field*> Bishop::getPlayableMoves(Chessboard cb){
 	
 	//moving diagonally
 
-	bool pieceLeft = false;
-	bool pieceRight = false;
-	for(int i=this->field->rank-1; i>0; i--){
+	bool downRight = false;
+	bool downLeft  = false;
+	bool upRight   = false;
+	bool upLeft    = false;
 
-		if(this->field->file-i >= 0 && !pieceLeft){
-			field = new Field(this->field->file-i,i);
-			if(!ChessPiece::friendlyPieceOnField(*field,cb))
-				res.push_back(field);
-			else{
+	for(int i=1; i<8; i++){
+		if(!downLeft && this->field->file-i >= 0 && this->field->rank-i >=0){
+			field = new Field(this->field->file-i,this->field->rank-i);
+			if(ChessPiece::friendlyPieceOnField(*field,cb)){
 				delete field;
-				pieceLeft = true;
+				downLeft = true;
 			}
+			else if(ChessPiece::enemyPieceOnField(*field,cb)){
+				res.push_back(field);
+				downLeft = true;
+			}
+			else
+				res.push_back(field);			
 		}
-
-		if(this->field->file+i < 8 && !pieceRight){
-			field = new Field(this->field->file+i,i);
-			if(!(ChessPiece::friendlyPieceOnField(*field,cb)))
-				res.push_back(field);
-			else{
+		if(!upLeft && this->field->file-i >= 0 && this->field->rank+i < 8){
+			field = new Field(this->field->file-i,this->field->rank+i);
+			if(ChessPiece::friendlyPieceOnField(*field,cb)){
 				delete field;
-				pieceRight = true;
+				upLeft = true;
 			}
+			else if(ChessPiece::enemyPieceOnField(*field,cb)){
+				res.push_back(field);
+				upLeft = true;
+			}
+			else
+				res.push_back(field);			
 		}
-	}
-
-	pieceLeft = false;
-	pieceRight = false;
-	for(int i=this->field->rank+1; i<8; i++){
-
-		if(this->field->file-i >= 0 && !pieceLeft){
-			field = new Field(this->field->file-i,i);
-			if(!(ChessPiece::friendlyPieceOnField(*field,cb)))
-				res.push_back(field);
-			else{
+		if(!upRight && this->field->file+i < 8 && this->field->rank+i < 8){
+			field = new Field(this->field->file+i,this->field->rank+i);
+			if(ChessPiece::friendlyPieceOnField(*field,cb)){
 				delete field;
-				pieceLeft = true;
+				upRight = true;
 			}
+			else if(ChessPiece::enemyPieceOnField(*field,cb)){
+				res.push_back(field);
+				upRight = true;
+			}
+			else
+				res.push_back(field);			
 		}
-
-		if(this->field->file+i < 8 && !pieceRight){
-			field = new Field(this->field->file+i,i);
-			if(!(ChessPiece::friendlyPieceOnField(*field,cb)))
-				res.push_back(field);
-			else{
+		if(!downRight && this->field->file+i < 8 && this->field->rank-i >= 0){
+			field = new Field(this->field->file+i,this->field->rank-i);
+			if(ChessPiece::friendlyPieceOnField(*field,cb)){
 				delete field;
-				pieceRight = true;
+				downRight = true;
 			}
+			else if(ChessPiece::enemyPieceOnField(*field,cb)){
+				res.push_back(field);
+				downRight = true;
+			}
+			else
+				res.push_back(field);			
 		}
 	}
 
@@ -76,6 +86,10 @@ bool Bishop::checkIfLegal(Field field, Chessboard cb){
 		delete move;
 	}
 	return res;
+}
+
+ChessPiece* Bishop::movedPiece(PlayerColor color, Field* dest){
+    return new Bishop(color, dest);
 }
 
 //Utility

@@ -25,11 +25,15 @@ list<Field*> Knight::getPlayableMoves(Chessboard cb){
 bool Knight::checkIfLegal(Field field, Chessboard cb){
 	int rankDiff = abs(field.rank - this->field->rank);
 	int fileDiff = abs(field.file - this->field->file);
-	if((rankDiff==1 && fileDiff==2) || (rankDiff==2 && fileDiff==1)
+	if(((rankDiff==1 && fileDiff==2) || (rankDiff==2 && fileDiff==1))
 		&& !friendlyPieceOnField(field,cb)){
 		return true;
 	}
 	return false;
+}
+
+ChessPiece* Knight::movedPiece(PlayerColor color, Field* dest){
+    return new Knight(color, dest);
 }
 
 //Utility

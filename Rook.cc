@@ -14,16 +14,24 @@ list<Field*> Rook::getPlayableMoves(Chessboard cb){
 	//moving horizontally
 	for(int i=this->field->rank-1; i>0; i--){
 		field = new Field(this->field->file, i);
-		if(!ChessPiece::fieldAttackedOrOccupied(*field,cb)){
+		if(ChessPiece::friendlyPieceOnField(*field,cb)){
 			delete field;
+			break;
+		}
+		else if(ChessPiece::enemyPieceOnField(*field,cb)){
+			res.push_back(field);
 			break;
 		}
 		res.push_back(field);
 	}
 	for(int i=this->field->rank+1; i<8; i++){
 		field = new Field(this->field->file, i);
-		if(!ChessPiece::fieldAttackedOrOccupied(*field,cb)){
+		if(ChessPiece::friendlyPieceOnField(*field,cb)){
 			delete field;
+			break;
+		}
+		else if(ChessPiece::enemyPieceOnField(*field,cb)){
+			res.push_back(field);
 			break;
 		}
 		res.push_back(field);
@@ -32,26 +40,37 @@ list<Field*> Rook::getPlayableMoves(Chessboard cb){
 	//moving vertically
 	for(int i=this->field->file-1; i>0; i--){
 		field = new Field(i, this->field->rank);
-		if(!ChessPiece::fieldAttackedOrOccupied(*field,cb)){
+		if(ChessPiece::friendlyPieceOnField(*field,cb)){
 			delete field;
+			break;
+		}
+		else if(ChessPiece::enemyPieceOnField(*field,cb)){
+			res.push_back(field);
 			break;
 		}
 		res.push_back(field);
 	}
 	for(int i=this->field->file+1; i<8; i++){
 		field = new Field(i, this->field->rank);
-		if(!ChessPiece::fieldAttackedOrOccupied(*field,cb)){
+		if(ChessPiece::friendlyPieceOnField(*field,cb)){
 			delete field;
+			break;
+		}
+		else if(ChessPiece::enemyPieceOnField(*field,cb)){
+			res.push_back(field);
 			break;
 		}
 		res.push_back(field);
 	}
 
+
+
+/* BUG: SEGFAULT
 	//queen-side castle
 	field = new Field(2,0);
 	if(this->inStartingPos && field->file==2
 	   && cb.board[4][0] != nullptr
-	   && typeid(*cb.board[5][0])==typeid(King)
+	   && typeid(*cb.board[5][0])==typeid(King)	//SEGFAULT
 	   && cb.board[4][0]->inStartingPos){
 		res.push_back(field);
 	}
@@ -65,7 +84,7 @@ list<Field*> Rook::getPlayableMoves(Chessboard cb){
 	   && cb.board[4][0]->inStartingPos){
 		res.push_back(field);
 	}
-	else delete field;
+	else delete field;*/
 
 	return res;
 }
@@ -80,6 +99,10 @@ bool Rook::checkIfLegal(Field field, Chessboard cb){
 		delete move;
 	}
 	return res;
+}
+
+ChessPiece* Rook::movedPiece(PlayerColor color, Field* dest){
+    return new Rook(color, dest);
 }
 
 //Utility

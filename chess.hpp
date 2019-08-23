@@ -72,13 +72,15 @@ class Game{
 
 
 		void selectField();
+		bool pickingMove();
+
+		int selFile = 0;
+		int selRank = 0;
 
 		void display(int file, int rank);
 
 	private:
 		bool selected = false;
-		int selFile = 0;
-		int selRank = 0;
 		list<Move*> moveHistory;
 		//TODO: unordered_map<Chessboard*, int> positionCount;
 };
@@ -126,8 +128,10 @@ class ChessPiece {
 		//Chess Related
 		virtual list<Field*> getPlayableMoves(Chessboard cb);
 		virtual bool checkIfLegal(Field field, Chessboard cb);
+		virtual ChessPiece* movedPiece(PlayerColor color, Field* dest);
 		bool checkIfLegal(Move* move, Chessboard cb);
 		bool friendlyPieceOnField(Field field, Chessboard cb);
+		bool enemyPieceOnField(Field field, Chessboard cb);
 		bool fieldAttackedOrOccupied(Field field, Chessboard cb);
 		
 		//Display
@@ -159,7 +163,7 @@ class Chessboard {
 		bool attackedByWhite[8][8];
 		bool attackedByBlack[8][8];
 		ChessPiece* pawnMovedLast = nullptr;
-		PlayerColor toMove;
+		PlayerColor toMove = PlayerColor::White;
 		void print(void) const;
 		void updateAttacked(void);
 
@@ -182,6 +186,7 @@ class King : public ChessPiece {
 		//Chess Related
 		list<Field*> getPlayableMoves(Chessboard cb);
 		bool checkIfLegal(Field field, Chessboard cb);
+		ChessPiece* movedPiece(PlayerColor color, Field* dest);
 		
 		//Display
 		void display(int file, int rank);
@@ -199,6 +204,7 @@ class Queen : public ChessPiece {
 		//Chess Related
 		list<Field*> getPlayableMoves(Chessboard cb);
 		bool checkIfLegal(Field field, Chessboard cb);
+		ChessPiece* movedPiece(PlayerColor color, Field* dest);
 		
 		//Display
 		void display(int file, int rank);
@@ -216,6 +222,7 @@ class Rook : public ChessPiece {
 		//Chess Related
 		list<Field*> getPlayableMoves(Chessboard cb);
 		bool checkIfLegal(Field field, Chessboard cb);
+		ChessPiece* movedPiece(PlayerColor color, Field* dest);
 		
 		//Display
 		void display(int file, int rank);
@@ -233,6 +240,7 @@ class Knight : public ChessPiece {
 		//Chess Related
 		list<Field*> getPlayableMoves(Chessboard cb);
 		bool checkIfLegal(Field field, Chessboard cb);
+		ChessPiece* movedPiece(PlayerColor color, Field* dest);
 		
 		//Display
 		void display(int file, int rank);
@@ -250,6 +258,7 @@ class Bishop : public ChessPiece {
 		//Chess Related
 		list<Field*> getPlayableMoves(Chessboard cb);
 		bool checkIfLegal(Field field, Chessboard cb);
+		ChessPiece* movedPiece(PlayerColor color, Field* dest);
 
 		//Display
 		void display(int file, int rank);
@@ -267,6 +276,7 @@ class Pawn : public ChessPiece {
 		//Chess Related
 		list<Field*> getPlayableMoves(Chessboard cb);
 		bool checkIfLegal(Field field, Chessboard cb);
+		ChessPiece* movedPiece(PlayerColor color, Field* dest);
 
 		//Display
 		void display(int file, int rank);

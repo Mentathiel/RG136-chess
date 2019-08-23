@@ -24,13 +24,26 @@ list<Field*> Pawn::getPlayableMoves(Chessboard cb){
 }
 
 bool Pawn::checkIfLegal(Field field, Chessboard cb){
-	int rankDiff = abs(field.rank - this->field->rank);
-	int fileDiff = abs(field.file - this->field->file);
+	PlayerColor color = this->getColor();
 
-		 //moving forward one square or eating
-	if(( (rankDiff==1 && fileDiff<=1)
+	int rankDiff = field.rank - this->field->rank;
+	int fileDiff = field.file - this->field->file;
+
+	if(color == PlayerColor::Black){
+		rankDiff = -rankDiff;
+		fileDiff = -fileDiff;
+	}
+
+
+		 //moving forward one square
+	if(( (rankDiff==1 && fileDiff==0)
+		 //or eating
+		 || (rankDiff==1 && (fileDiff==1 || fileDiff == -1) 
+		 		&& cb.board[field.file][field.rank] != nullptr
+		 		&& color != cb.board[field.file][field.rank]->getColor()) 
 		 //moving forward two squares if at starting position
-		 || (rankDiff==2 && field.file == this->field->file && this->field->rank==1)
+		 || (rankDiff==2 && field.file == this->field->file 
+		 	&& (this->field->rank==1 || this->field->rank==6))
 		 //en passant
 		 || (cb.pawnMovedLast != nullptr 
 		 	 && *(cb.pawnMovedLast->field) == field
@@ -41,6 +54,11 @@ bool Pawn::checkIfLegal(Field field, Chessboard cb){
 		return true;
 	}
 	return false;
+
+}
+
+ChessPiece* Pawn::movedPiece(PlayerColor color, Field* dest){
+    return new Pawn(color, dest);
 }
 
 //Utility

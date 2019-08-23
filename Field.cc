@@ -40,7 +40,7 @@ string Field::toString(){
 
 	res += fileName(file);
 
-	res += to_string(rank);
+	res += to_string(rank+1);
 
 	return res;
 }

@@ -12,7 +12,7 @@ void Chessboard::print() const{
 			if(board[j][i] == nullptr)
 				cout << "     ";
 			else
-				cout << *board[j][i];
+				cout << *board[j][i] << " ";
 		}
 		cout << endl;
 	}
@@ -30,12 +30,13 @@ void Chessboard::updateAttacked(){
 	for(int i=0; i<8; i++){
 		for(int j=0; j<8; j++){
 			if(board[i][j] != nullptr){
+				PlayerColor color = board[i][j]->getColor();
 				list<Field*> li = board[i][j]->getPlayableMoves(*this);
 				for(Field* f : li){
-					if(board[i][j]->getColor() == PlayerColor::White){
+					if(color == PlayerColor::White){
 						attackedByWhite[f->file][f->rank] = true;
 					}
-					else{
+					else if(color == PlayerColor::Black){
 						attackedByBlack[f->file][f->rank] = true;
 					}
 					delete f;

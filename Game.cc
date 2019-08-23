@@ -46,11 +46,12 @@ bool Game::checkForDraw(){
 void Game::playMove(Move* move){
 	selected = false;
 
-	if(move->moving->checkIfLegal(*move->dest, *cb)){
+	if(move->moving->checkIfLegal(*move->dest, *cb)
+	   && cb->toMove == move->moving->getColor()){
 		cb->board[move->from->file][move->from->rank] = nullptr;
 		cb->board[move->dest->file][move->dest->rank] = 
-			new ChessPiece(move->moving->getColor(), 
-						   new Field(move->dest->file,move->dest->rank));
+			move->moving->movedPiece(move->moving->getColor(), 
+					   new Field(move->dest->file,move->dest->rank));
 		cb->updateAttacked();
 		moveHistory.push_back(move);
 
@@ -63,6 +64,15 @@ void Game::playMove(Move* move){
 			//TODO: draw
 			//HACK: using playMove to check for opened check
 			//can end the game with a draw a move early
+		//TODO: win
+		}
+
+		
+		if(cb->toMove == PlayerColor::White){
+			cb->toMove = PlayerColor::Black;
+		}
+		else if(cb->toMove == PlayerColor::Black){
+			cb->toMove = PlayerColor::White;
 		}
 	}
 	else{
@@ -85,12 +95,26 @@ Move Game::undoMove(void){
 		cb->updateAttacked();
 		moveHistory.pop_back();
 	}
+
+	if(cb->toMove == PlayerColor::White){
+		cb->toMove = PlayerColor::Black;
+	}
+	else if(cb->toMove == PlayerColor::Black){
+		cb->toMove = PlayerColor::White;
+	}
 }
 
 void Game::selectField(){
-	selected = true;
-	selFile = selFieldFile;
-	selRank = selFieldRank;
+	if(cb->board[selFieldFile][selFieldRank] != nullptr
+	   && cb->board[selFieldFile][selFieldRank]->getColor() == cb->toMove){
+		selected = true;
+		selFile = selFieldFile;
+		selRank = selFieldRank;
+	}
+}
+
+bool Game::pickingMove(){
+	return selected;
 }
 
 void Game::display(int file, int rank){

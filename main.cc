@@ -108,13 +108,22 @@ static void onKeyboard(unsigned char key, int x, int y)
 {
     switch (key) {
     case 13:
-        game->selectField();
-        glutPostRedisplay();
+        if(game->pickingMove()){
+            Field* target = new Field(selFieldFile, selFieldRank);
+            ChessPiece* mov = game->cb->board[game->selFile][game->selRank];
+            game->playMove(target, mov);
+            //game->cb->print();
+        }
+        else{
+            game->selectField();
+        }
         break;
     case 27:
         exit(0);
         break;
     }
+
+    glutPostRedisplay();
 }
 
 static void onSpecialKey(int key, int x, int y){
