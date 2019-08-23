@@ -70,9 +70,15 @@ class Game{
 		bool checkForDraw();
 		bool checkForMate();
 
+
+		void selectField();
+
 		void display(int file, int rank);
 
 	private:
+		bool selected = false;
+		int selFile = 0;
+		int selRank = 0;
 		list<Move*> moveHistory;
 		//TODO: unordered_map<Chessboard*, int> positionCount;
 };
@@ -158,7 +164,7 @@ class Chessboard {
 		void updateAttacked(void);
 
 		//Display
-		virtual void display(int file, int rank);
+		virtual void display(int file, int rank, bool selected, int selFile, int selRank);
 
 	private:
 		void initializeBoard(void);

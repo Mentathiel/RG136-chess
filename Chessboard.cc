@@ -131,7 +131,7 @@ bool Chessboard::operator!=(const Chessboard& a){
 	return false;
 }
 
-void Chessboard::display(int file, int rank){
+void Chessboard::display(int file, int rank, bool selected, int selFile, int selRank){
 	glDisable(GL_LIGHTING);
 
 	//lower left
@@ -149,6 +149,11 @@ void Chessboard::display(int file, int rank){
 			else{
 				glColor3f( 0.8, 0.7, 0.6 );
 			}
+
+		    if(selected && selRank+1 == j && selFile+1 == i){
+		    	glColor3f( 0.8, 0.5, 0.4 );
+		    }
+
 		    glTranslatef(-4.5+i, -4.5+j, 10);
 		    glutSolidCube(1);		    
 		    glPopMatrix();
@@ -169,6 +174,11 @@ void Chessboard::display(int file, int rank){
 			else{
 				glColor3f( 0.8, 0.7, 0.6 );
 			}
+
+		    if(selected && selRank == j && selFile == i){
+		    	glColor3f( 0.8, 0.5, 0.4 );
+		    }
+
 		    glTranslatef(-3.5+i, -3.5+j, 10);
 		    glutSolidCube(1);		    
 		    glPopMatrix();
@@ -190,6 +200,11 @@ void Chessboard::display(int file, int rank){
 			else{
 				glColor3f( 0.2, 0.1, 0 );
 			}
+
+		    if(selected && selRank+1 == j && selFile == i){
+		    	glColor3f( 0.8, 0.5, 0.4 );
+		    }
+
 		    glTranslatef(-3.5+i, -4.5+j, 10);
 		    glutSolidCube(1);		    
 		    glPopMatrix();
@@ -210,6 +225,11 @@ void Chessboard::display(int file, int rank){
 			else{
 				glColor3f( 0.2, 0.1, 0 );
 			}
+
+		    if(selected && selRank == j && selFile+1 == i){
+		    	glColor3f( 0.8, 0.5, 0.4 );
+		    }
+
 		    glTranslatef(-4.5+i, -3.5+j, 10);
 		    glutSolidCube(1);		    
 		    glPopMatrix();

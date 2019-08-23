@@ -1,5 +1,8 @@
 #include "chess.hpp"
 
+extern int selFieldFile;
+extern int selFieldRank;
+
 Game::Game(){
 	cb = new Chessboard();
 }
@@ -41,6 +44,8 @@ bool Game::checkForDraw(){
 }
 
 void Game::playMove(Move* move){
+	selected = false;
+
 	if(move->moving->checkIfLegal(*move->dest, *cb)){
 		cb->board[move->from->file][move->from->rank] = nullptr;
 		cb->board[move->dest->file][move->dest->rank] = 
@@ -82,8 +87,14 @@ Move Game::undoMove(void){
 	}
 }
 
+void Game::selectField(){
+	selected = true;
+	selFile = selFieldFile;
+	selRank = selFieldRank;
+}
+
 void Game::display(int file, int rank){
-	cb->display(file, rank);
+	cb->display(file, rank, selected, selFile, selRank);
 
 
 	for(int i=0; i<8; i++){
