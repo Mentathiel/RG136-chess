@@ -1,15 +1,9 @@
 #include "chess.hpp"
 
 //Constructors
-Rook::Rook(PlayerColor color, int file, int rank) : ChessPiece(color,file,rank){
-	string str = "Pieces 3D/rook.obj";
-	objHandler.loadModel(str.c_str());
-}
+Rook::Rook(PlayerColor color, int file, int rank) : ChessPiece(color,file,rank){}
 
-Rook::Rook(PlayerColor color, Field* field) : ChessPiece(color,field){
-	string str = "Pieces 3D/rook.obj";
-	objHandler.loadModel(str.c_str());
-}
+Rook::Rook(PlayerColor color, Field* field) : ChessPiece(color,field){}
 
 //Chess Related
 list<Field*> Rook::getPlayableMoves(Chessboard cb){
@@ -92,4 +86,19 @@ bool Rook::checkIfLegal(Field field, Chessboard cb){
 string Rook::toString() const{
 	string res = "R";
 	return res;
+}
+
+//Display
+void Rook::display(int file, int rank){
+	glPushMatrix();
+		if(this->getColor()==PlayerColor::White){
+			glColor3f( 0.9, 0.8, 0.7 );
+		}
+		else{
+			glColor3f( 0.3, 0.2, 0.1 );
+		}
+	
+	    glTranslatef(-3.5+file,-3.5+rank,10);
+	    glutSolidCube(0.5);
+	glPopMatrix();
 }

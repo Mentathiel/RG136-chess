@@ -5,6 +5,7 @@
 #include <list>
 #include <algorithm>
 #include <typeinfo>
+#include <vector>
 #include <GL/glut.h>
 
 using namespace std;
@@ -28,6 +29,7 @@ enum PlayerColor{
 
 class ObjHandler{
 	public:
+		~ObjHandler();
 		void loadModel(const char* fileName);
 
 		void draw();
@@ -44,12 +46,12 @@ class ObjHandler{
 		} Vector2f;
 
 	private:
-	    vector<Vector3f> vertices;
+	    vector<Vector3f*> vertices;
 	    //vector<Vector2f> textureOrd;
-        vector<int> indices;
-	    vector<Vector3f> normalsOrd;
+        vector<int*> indices;
+	    vector<Vector3f*> normalsOrd;
 
-		static vector<int> tokenizeF(string s);
+		static vector<int*> tokenizeF(string s);
 };
 
 class Game{
@@ -114,7 +116,6 @@ class ChessPiece {
 		Field* field;
 		bool onBoard = true;
 		bool inStartingPos = true;
-		ObjHandler objHandler;
 
 		//Chess Related
 		virtual list<Field*> getPlayableMoves(Chessboard cb);
@@ -124,7 +125,7 @@ class ChessPiece {
 		bool fieldAttackedOrOccupied(Field field, Chessboard cb);
 		
 		//Display
-		void display(int file, int rank);
+		virtual void display(int file, int rank);
 
 		//Getters
 		PlayerColor getColor(void) const;

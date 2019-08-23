@@ -88,7 +88,7 @@ void Game::display(int file, int rank){
 
 	for(int i=0; i<8; i++){
 		for(int j=0; j<8; j++){
-			if(cb->board[i][j] != nullptr){
+			if(cb->board[i][j] != nullptr && cb->board[i][j]->onBoard){
 				cb->board[i][j]->display(i,j);
 			}
 		}

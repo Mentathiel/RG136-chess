@@ -1,15 +1,9 @@
 #include "chess.hpp"
 
 //Constructors
-Queen::Queen(PlayerColor color, int file, int rank) : ChessPiece(color,file,rank){
-	string str = "Pieces 3D/queen.obj";
-	objHandler.loadModel(str.c_str());
-}
+Queen::Queen(PlayerColor color, int file, int rank) : ChessPiece(color,file,rank){}
 
-Queen::Queen(PlayerColor color, Field* field) : ChessPiece(color,field){
-	string str = "Pieces 3D/queen.obj";
-	objHandler.loadModel(str.c_str());
-}
+Queen::Queen(PlayerColor color, Field* field) : ChessPiece(color,field){}
 
 //Chess Related
 list<Field*> Queen::getPlayableMoves(Chessboard cb){
@@ -129,5 +123,34 @@ string Queen::toString() const{
 
 //Display
 void Queen::display(int file, int rank){
-
+	glPushMatrix();
+		if(this->getColor()==PlayerColor::White){
+			glColor3f( 0.9, 0.8, 0.7 );
+		}
+		else{
+			glColor3f( 0.3, 0.2, 0.1 );
+		}
+	
+	    glTranslatef(-3.5+file,-3.5+rank,10);
+	    glScalef(0.8,0.8,1);
+	    glPushMatrix();
+	    	glTranslatef(-0.3,0,0);
+	    	glScalef(0.3,1,0.3);
+		    glutSolidCube(0.75);
+		glPopMatrix();
+    	glPushMatrix();
+	    	glScalef(0.3,1,0.3);
+		    glutSolidCube(0.75);
+		glPopMatrix();
+    	glPushMatrix();
+	    	glTranslatef(+0.3,0,0);
+	    	glScalef(0.3,1,0.3);
+		    glutSolidCube(0.75);
+		glPopMatrix();
+    	glPushMatrix();
+    		glTranslatef(0,-0.3,0);
+	    	glScalef(1,0.3,0.3);
+		    glutSolidCube(0.75);
+		glPopMatrix();
+	glPopMatrix();
 }

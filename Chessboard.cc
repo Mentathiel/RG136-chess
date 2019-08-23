@@ -132,7 +132,9 @@ bool Chessboard::operator!=(const Chessboard& a){
 }
 
 void Chessboard::display(int file, int rank){
-	/*LOWER LEFT*/
+	glDisable(GL_LIGHTING);
+
+	//lower left
 	for(int i=4; i>0; i--){
 		for(int j=4; j>0; j--){
 		    glPushMatrix();
@@ -240,4 +242,6 @@ void Chessboard::display(int file, int rank){
 		glVertex3f( 4.0, 4.0, 9.5);
 		glVertex3f(-4.0, 4.0, 9.5);	
 	glEnd();
+
+	glEnable(GL_LIGHTING);
 }

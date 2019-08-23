@@ -128,5 +128,5 @@ string ChessPiece::toString() const{
 
 //Display
 void ChessPiece::display(int file, int rank){
-    objHandler.draw();
+    
 }
