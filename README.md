@@ -1,5 +1,5 @@
 # Chess
-![](Screenshots/04 Light and Materials Adjusted.png)
+![Chessboard](https://github.com/MATF-RG18/RG136-chess/blob/66046f6bf8325de12de2f645c2a1c88298d5e8d5/Screenshots/04%20Light%20and%20Materials%20Adjusted.png?raw=true)
 
 ### Input
 
