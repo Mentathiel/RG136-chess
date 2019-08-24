@@ -26,7 +26,6 @@ ostream& operator<<(ostream& out, const ChessPiece& cp)
 }
 
 bool ChessPiece::friendlyPieceOnField(Field field, Chessboard cb){
-
     if(cb.board[field.file][field.rank] != nullptr){
         if(cb.board[field.file][field.rank]->getColor() == this->color)
             return true;
@@ -105,4 +104,39 @@ string ChessPiece::toString() const{
 //Display
 void ChessPiece::display(int file, int rank){
     
+}
+
+void ChessPiece::setMats(){
+    GLfloat ambient_coeffs[4];
+
+    if(this->color == PlayerColor::White){
+        ambient_coeffs[0] = 0.9;
+        ambient_coeffs[1] = 0.8;
+        ambient_coeffs[2] = 0.7;
+        ambient_coeffs[3] = 1;
+    }
+    else{
+        ambient_coeffs[0] = 0.2;
+        ambient_coeffs[1] = 0.2;
+        ambient_coeffs[2] = 0.2;
+        ambient_coeffs[3] = 1;
+        if(typeid(*this) == typeid(Knight)
+            || typeid(*this) == typeid(Bishop)
+            || typeid(*this) == typeid(Queen)
+            || typeid(*this) == typeid(King)){
+            ambient_coeffs[0] = 0;
+            ambient_coeffs[1] = 0;
+            ambient_coeffs[2] = 0;            
+        }
+    }
+
+    GLfloat diffuse_coeffs[] = { 0.2, 0.2, 0.2, 1 };
+    GLfloat specular_coeffs[] = { 0.2, 0.2, 0.2, 1 };
+    GLfloat shininess = 10;
+    //GLfloat material_emission[] = { 0.3, 0.2, 0.2, 0 };
+    glMaterialfv(GL_FRONT, GL_AMBIENT, ambient_coeffs);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_coeffs);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, specular_coeffs);
+    glMaterialf(GL_FRONT, GL_SHININESS, shininess);
+    //glMaterialfv(GL_FRONT, GL_EMISSION, material_emission);
 }

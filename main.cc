@@ -42,7 +42,7 @@ int main(int argc, char **argv)
     glClearColor(0.75, 0.75, 0.75, 0);
 
     /* Initializing light & materials. */
-    GLfloat light_ambient[] = { 0.2, 0.2, 0.2, 1 };
+    GLfloat light_ambient[] = { 0.4, 0.4, 0.4, 1 };
     GLfloat light_diffuse[] = { 0.3, 0.3, 0.3, 1 };
     GLfloat light_specular[] = { 0.5, 0.5, 0.5, 1 };
 
@@ -54,7 +54,7 @@ int main(int argc, char **argv)
     glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
     glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
     glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-    glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER,1);
+    glLightModeli(GL_LIGHT_MODEL_AMBIENT,1);
     
 
     /* The program is entering the main loop. */
