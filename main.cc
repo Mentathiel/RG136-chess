@@ -46,26 +46,16 @@ int main(int argc, char **argv)
     GLfloat light_diffuse[] = { 0.3, 0.3, 0.3, 1 };
     GLfloat light_specular[] = { 0.5, 0.5, 0.5, 1 };
 
-    GLfloat ambient_coeffs[] = { 0.7, 0.3, 0.3, 1 };
-    GLfloat diffuse_coeffs[] = { 0.2, 0.7, 0.2, 1 };
-    GLfloat specular_coeffs[] = { 0.5, 0.5, 0.5, 1 };
-    GLfloat shininess = 50;
-
-    GLfloat light_position[] = { -20, 0, -100, 0 };
+    GLfloat light_position[] = { -20, 0, -600, 0 };
 
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
     glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
     glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
-    glLightModeli(GL_LIGHT_MODEL_TWO_SIDE,1);
-
-
-    glMaterialfv(GL_FRONT, GL_AMBIENT, ambient_coeffs);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_coeffs);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, specular_coeffs);
-    glMaterialf(GL_FRONT, GL_SHININESS, shininess);
     glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+    glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER,1);
+    
 
     /* The program is entering the main loop. */
     glutMainLoop();
@@ -108,11 +98,18 @@ static void onKeyboard(unsigned char key, int x, int y)
 {
     switch (key) {
     case 13:
+        if(game->gameFinished){
+            delete game;
+            game = new Game();
+            break;
+        }
+
         if(game->pickingMove()){
             Field* target = new Field(selFieldFile, selFieldRank);
             ChessPiece* mov = game->cb->board[game->selFile][game->selRank];
             game->playMove(target, mov);
             //game->cb->print();
+            game->checkState();
         }
         else{
             game->selectField();
@@ -127,6 +124,9 @@ static void onKeyboard(unsigned char key, int x, int y)
 }
 
 static void onSpecialKey(int key, int x, int y){
+    if(game->gameFinished)
+        return;
+
     switch (key) {
         case GLUT_KEY_RIGHT:
             if(selFieldFile<7)

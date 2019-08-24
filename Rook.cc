@@ -12,7 +12,7 @@ list<Field*> Rook::getPlayableMoves(Chessboard cb){
 	Field* field;
 
 	//moving horizontally
-	for(int i=this->field->rank-1; i>0; i--){
+	for(int i=this->field->rank-1; i>=0; i--){
 		field = new Field(this->field->file, i);
 		if(ChessPiece::friendlyPieceOnField(*field,cb)){
 			delete field;
@@ -38,7 +38,7 @@ list<Field*> Rook::getPlayableMoves(Chessboard cb){
 	}
 
 	//moving vertically
-	for(int i=this->field->file-1; i>0; i--){
+	for(int i=this->field->file-1; i>=0; i--){
 		field = new Field(i, this->field->rank);
 		if(ChessPiece::friendlyPieceOnField(*field,cb)){
 			delete field;
@@ -114,6 +114,7 @@ string Rook::toString() const{
 //Display
 void Rook::display(int file, int rank){
 	glPushMatrix();
+		ChessPiece::setMats();
 		if(this->getColor()==PlayerColor::White){
 			glColor3f( 0.9, 0.8, 0.7 );
 		}

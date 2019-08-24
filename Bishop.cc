@@ -101,6 +101,7 @@ string Bishop::toString() const{
 //Display
 void Bishop::display(int file, int rank){
 	glPushMatrix();
+		ChessPiece::setMats();
 		if(this->getColor()==PlayerColor::White){
 			glColor3f( 0.9, 0.8, 0.7 );
 		}

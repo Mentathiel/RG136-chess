@@ -154,6 +154,7 @@ string Queen::toString() const{
 //Display
 void Queen::display(int file, int rank){
 	glPushMatrix();
+		ChessPiece::setMats();
 		if(this->getColor()==PlayerColor::White){
 			glColor3f( 0.9, 0.8, 0.7 );
 		}

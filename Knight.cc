@@ -45,6 +45,7 @@ string Knight::toString() const{
 //Display
 void Knight::display(int file, int rank){
 	glPushMatrix();
+		ChessPiece::setMats();
 		if(this->getColor()==PlayerColor::White){
 			glColor3f( 0.9, 0.8, 0.7 );
 		}

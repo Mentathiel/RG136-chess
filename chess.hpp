@@ -61,14 +61,18 @@ class Game{
 		
 		Chessboard* cb;
 		int movesSinceCapturePawnMove = 0;
+		bool gameFinished = false;
 
 		void playMove(Move* move);
 		void playMove(Field* dest, ChessPiece* moving);
 
 		Move undoMove(void);
 
+		bool checkForCheck(PlayerColor color);
+		bool checkForCheck();
 		bool checkForDraw();
 		bool checkForMate();
+		void checkState();
 
 
 		void selectField();
@@ -136,6 +140,7 @@ class ChessPiece {
 		
 		//Display
 		virtual void display(int file, int rank);
+		void setMats(void);
 
 		//Getters
 		PlayerColor getColor(void) const;

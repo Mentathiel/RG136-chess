@@ -39,7 +39,7 @@ void Chessboard::updateAttacked(){
 					else if(color == PlayerColor::Black){
 						attackedByBlack[f->file][f->rank] = true;
 					}
-					delete f;
+					//delete f;
 				}
 			}
 		}
@@ -87,15 +87,6 @@ void Chessboard::initializeBoard(){
 	board[4][0] = new King(PlayerColor::White, 4, 0);
 	board[4][7] = new King(PlayerColor::Black, 4, 7);
 }
-
-
-/*
-		ChessPiece* board[8][8];
-		bool attackedByWhite[8][8];
-		bool attackedByBlack[8][8];
-		ChessPiece* pawnMovedLast = nullptr;
-		PlayerColor toMove;
-*/
 
 bool Chessboard::operator==(const Chessboard& a){
 	if(typeid(*this->pawnMovedLast) != typeid(*a.pawnMovedLast)

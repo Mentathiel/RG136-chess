@@ -36,20 +36,21 @@ bool Pawn::checkIfLegal(Field field, Chessboard cb){
 
 
 		 //moving forward one square
-	if(( (rankDiff==1 && fileDiff==0)
+	if(( (rankDiff==1 && fileDiff==0 
+		 	&& !friendlyPieceOnField(field,cb) && !enemyPieceOnField(field,cb))
 		 //or eating
 		 || (rankDiff==1 && (fileDiff==1 || fileDiff == -1) 
-		 		&& cb.board[field.file][field.rank] != nullptr
-		 		&& color != cb.board[field.file][field.rank]->getColor()) 
+		 		&& enemyPieceOnField(field,cb)) 
 		 //moving forward two squares if at starting position
 		 || (rankDiff==2 && field.file == this->field->file 
-		 	&& (this->field->rank==1 || this->field->rank==6))
+		 	&& (this->field->rank==1 || this->field->rank==6)
+		 	&& !enemyPieceOnField(field,cb))
 		 //en passant
 		 || (cb.pawnMovedLast != nullptr 
 		 	 && *(cb.pawnMovedLast->field) == field
 		 	 && cb.pawnMovedLast->field->rank == this->field->rank
 		 	 && (cb.pawnMovedLast->field->file - this->field->file) == 1) )
-		&& !friendlyPieceOnField(field,cb)){
+		){
 		
 		return true;
 	}
@@ -70,6 +71,7 @@ string Pawn::toString() const{
 //Display
 void Pawn::display(int file, int rank){
 	glPushMatrix();
+		ChessPiece::setMats();
 		if(this->getColor()==PlayerColor::White){
 			glColor3f( 0.9, 0.8, 0.7 );
 		}
