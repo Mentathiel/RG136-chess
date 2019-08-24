@@ -6,18 +6,18 @@ static void onKeyboard(unsigned char key, int x, int y);
 static void onSpecialKey(int key, int x, int y);
 static void onReshape(int width, int height);
 
-/*Global game variables*/
+/* Global game variables */
 Game* game;
 int selFieldFile = 0;
 int selFieldRank = 0;
 
-/*Global GLUT variables*/
+/* Global GLUT variables */
 int winWidth = 1280;
 int winHeight = 720;
 
 int main(int argc, char **argv)
 {
-
+    /* Starting a New Game */
     game = new Game();
 
     /* Initializing GLUT. */
@@ -65,11 +65,13 @@ int main(int argc, char **argv)
 
 static void onDisplay(void)
 {
+    /* Setting Clear Color and Depth */
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
      /* Set the viewport. */
     glViewport(0, 0, winWidth, winHeight);
 
+    /*  Setting up perspective and camera */
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective(
@@ -96,37 +98,49 @@ static void onDisplay(void)
 
 static void onKeyboard(unsigned char key, int x, int y)
 {
-    switch (key) {
-    case 13:
-        if(game->gameFinished){
-            delete game;
-            game = new Game();
-            break;
-        }
-
-        if(game->pickingMove()){
-            Field* target = new Field(selFieldFile, selFieldRank);
-            ChessPiece* mov = game->cb->board[game->selFile][game->selRank];
-            game->playMove(target, mov);
-            //game->cb->print();
-            game->checkState();
-        }
-        else{
-            game->selectField();
-        }
-        break;
-    case 27:
-        exit(0);
-        break;
+    /* If the game is finished (either by draw or one side winning) 
+       this creates a new game on any input. */
+    if(game->gameFinished){
+        delete game;
+        game = new Game();
     }
 
+    /* Check key */
+    switch (key) {
+
+        case 13: //enter
+
+            // if a piece is selected and we're picking a field to move it to
+            if(game->pickingMove()){
+                Field* target = new Field(selFieldFile, selFieldRank);
+                ChessPiece* mov = game->cb->board[game->selFile][game->selRank];
+                game->playMove(target, mov);
+                //game->cb->print();
+                game->checkState();
+            }
+            // if we're selecting a piece
+            else{
+                game->selectField();
+            }
+            break;
+
+        case 27: //esc
+            exit(0);
+            break;
+    }
+
+    /* Refresh screen because the game state has changed.
+       Refreshing here in case additional inputs are added later. */
     glutPostRedisplay();
 }
 
 static void onSpecialKey(int key, int x, int y){
+    /* The player can still move around the board, but can't select
+       anything anymore. */
     if(game->gameFinished)
         return;
 
+    /* Selecting fields using arrow keys. */
     switch (key) {
         case GLUT_KEY_RIGHT:
             if(selFieldFile<7)
@@ -145,9 +159,14 @@ static void onSpecialKey(int key, int x, int y){
                 selFieldRank--;
             break;
     }
+
+    /* Refresh screen because the game state has changed.
+    Refreshing here in case additional inputs are added later. */
     glutPostRedisplay();
 }
 
+/* Proportionally reshape everything when the user rezsizes
+   the window. */
 static void onReshape(int width, int height){
     float ratio = (float)width/height;
     winWidth = width;

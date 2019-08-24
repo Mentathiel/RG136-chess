@@ -1,11 +1,13 @@
 #include "chess.hpp"
 
-//Constructors
+/* CONSTRUCTORS */
+
 Knight::Knight(PlayerColor color, int file, int rank) : ChessPiece(color,file,rank){}
 
 Knight::Knight(PlayerColor color, Field* field) : ChessPiece(color,field){}
 
-//Chess Related
+/* CHESS RELATED */
+
 list<Field*> Knight::getPlayableMoves(Chessboard cb){
 	//TODO: Move would open check
 	list<Field*> res;
@@ -23,6 +25,7 @@ list<Field*> Knight::getPlayableMoves(Chessboard cb){
 }
 
 bool Knight::checkIfLegal(Field field, Chessboard cb){
+
 	int rankDiff = abs(field.rank - this->field->rank);
 	int fileDiff = abs(field.file - this->field->file);
 	if(((rankDiff==1 && fileDiff==2) || (rankDiff==2 && fileDiff==1))
@@ -32,17 +35,25 @@ bool Knight::checkIfLegal(Field field, Chessboard cb){
 	return false;
 }
 
+
+/* Returns a new piece after moving it. Needed so we could access
+   the functionality from a pointer of ChessPiece* type instead of
+   checking typeof for every piece. */
 ChessPiece* Knight::movedPiece(PlayerColor color, Field* dest){
     return new Knight(color, dest);
 }
 
-//Utility
+
+/* UTILITY */
+
 string Knight::toString() const{
 	string res = "N";
 	return res;
 }
 
-//Display
+
+/* DISPLAY */
+
 void Knight::display(int file, int rank){
 	glPushMatrix();
 		ChessPiece::setMats();

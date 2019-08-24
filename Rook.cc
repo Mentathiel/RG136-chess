@@ -1,17 +1,28 @@
 #include "chess.hpp"
 
-//Constructors
+/* CONSTRUCTORS */
+
 Rook::Rook(PlayerColor color, int file, int rank) : ChessPiece(color,file,rank){}
 
 Rook::Rook(PlayerColor color, Field* field) : ChessPiece(color,field){}
 
-//Chess Related
+
+/* CHESS RELATED */
+
 list<Field*> Rook::getPlayableMoves(Chessboard cb){
-	//TODO: Move would open check
+
+	// result variable
 	list<Field*> res;
+	// current field that we're checking
 	Field* field;
 
-	//moving horizontally
+	/* Moving horizonally/vertically, we stop: 
+	   - when we encounter a piece
+	   -- friendly means we can't go to that field
+	   -- enemy we can eat, but can't go further
+	   - on the edge of the board */
+
+	// moving down
 	for(int i=this->field->rank-1; i>=0; i--){
 		field = new Field(this->field->file, i);
 		if(ChessPiece::friendlyPieceOnField(*field,cb)){
@@ -24,6 +35,7 @@ list<Field*> Rook::getPlayableMoves(Chessboard cb){
 		}
 		res.push_back(field);
 	}
+	// moving up
 	for(int i=this->field->rank+1; i<8; i++){
 		field = new Field(this->field->file, i);
 		if(ChessPiece::friendlyPieceOnField(*field,cb)){
@@ -37,7 +49,7 @@ list<Field*> Rook::getPlayableMoves(Chessboard cb){
 		res.push_back(field);
 	}
 
-	//moving vertically
+	// moving left
 	for(int i=this->field->file-1; i>=0; i--){
 		field = new Field(i, this->field->rank);
 		if(ChessPiece::friendlyPieceOnField(*field,cb)){
@@ -50,6 +62,7 @@ list<Field*> Rook::getPlayableMoves(Chessboard cb){
 		}
 		res.push_back(field);
 	}
+	// moving right
 	for(int i=this->field->file+1; i<8; i++){
 		field = new Field(i, this->field->rank);
 		if(ChessPiece::friendlyPieceOnField(*field,cb)){
@@ -63,33 +76,14 @@ list<Field*> Rook::getPlayableMoves(Chessboard cb){
 		res.push_back(field);
 	}
 
-
-
-/* BUG: SEGFAULT
-	//queen-side castle
-	field = new Field(2,0);
-	if(this->inStartingPos && field->file==2
-	   && cb.board[4][0] != nullptr
-	   && typeid(*cb.board[5][0])==typeid(King)	//SEGFAULT
-	   && cb.board[4][0]->inStartingPos){
-		res.push_back(field);
-	}
-	else delete field;
-
-	//king-side castle
-	field = new Field(5,0);
-	if(this->inStartingPos && field->file==5
-	   && cb.board[4][0] != nullptr
-	   && typeid(*cb.board[5][0])==typeid(King)
-	   && cb.board[4][0]->inStartingPos){
-		res.push_back(field);
-	}
-	else delete field;*/
-
 	return res;
 }
 
 bool Rook::checkIfLegal(Field field, Chessboard cb){
+
+	/* If the move is within this piece's list of playable moves,
+	   it is a legal move.*/
+
 	list<Field*> playable = this->getPlayableMoves(cb);
 	bool res = false;
 	for(Field* move : playable){
@@ -101,17 +95,25 @@ bool Rook::checkIfLegal(Field field, Chessboard cb){
 	return res;
 }
 
+
+/* Returns a new piece after moving it. Needed so we could access
+   the functionality from a pointer of ChessPiece* type instead of
+   checking typeof for every piece. */
 ChessPiece* Rook::movedPiece(PlayerColor color, Field* dest){
     return new Rook(color, dest);
 }
 
-//Utility
+
+/* UTILITY */
+
 string Rook::toString() const{
 	string res = "R";
 	return res;
 }
 
-//Display
+
+/* DISPLAY */
+
 void Rook::display(int file, int rank){
 	glPushMatrix();
 		ChessPiece::setMats();

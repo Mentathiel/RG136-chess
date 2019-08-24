@@ -1,8 +1,11 @@
 #include "chess.hpp"
 
+/* UTILITY */
+
 string Field::fileName(int n){
 	string res = "";
 
+	// chess notation file names
 	switch(n){
 		case 0:
 			res += "a";
@@ -29,7 +32,9 @@ string Field::fileName(int n){
 			res += "h";
 			break;
 		default:
-			res += "{corrupted file marker}";
+			// corrupted file marker
+			res += "$";
+			break;
 	}
 
 	return res;
@@ -40,10 +45,15 @@ string Field::toString(){
 
 	res += fileName(file);
 
+	// rank, +1 because the array starts at 0,
+	// and in chess it should start at 1
 	res += to_string(rank+1);
 
 	return res;
 }
+
+
+/* OPERATOR OVERLOADING */
 
 bool Field::operator==(const Field& a){
 	Field b = *this;

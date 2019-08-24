@@ -1,11 +1,14 @@
 #include "chess.hpp"
 
-//Constructors
+/* CONSTRUCTORS */
+
 King::King(PlayerColor color, int file, int rank) : ChessPiece(color,file,rank){}
 
 King::King(PlayerColor color, Field* field) : ChessPiece(color,field){}
 
-//Chess Related
+
+/* CHESS RELATED */
+
 list<Field*> King::getPlayableMoves(Chessboard cb){
 	list<Field*> res;
 	Field* field;
@@ -22,6 +25,11 @@ list<Field*> King::getPlayableMoves(Chessboard cb){
 }
 
 bool King::checkIfLegal(Field field, Chessboard cb){
+	/* Moving to an adjacent field, checking if the field is
+	   adjacent, is it not the same field, and whether it's
+	   attacked or occupied by a friendly piece. A king can't
+	   be moved into check, so we also have to check if it's attacked,
+	   as opposed to just whether it's occupied. */
 	if(abs(this->field->rank - field.rank) <= 1 
 	   && abs(this->field->file - field.file) <= 1 
 	   && *(this->field) != field 
@@ -29,37 +37,65 @@ bool King::checkIfLegal(Field field, Chessboard cb){
 		return true;
 	}
 	
-	//queen-side castle
-	if(this->inStartingPos && field.file==2
-	   && cb.board[0][this->field->rank] != nullptr
-	   && typeid(*cb.board[0][this->field->rank])==typeid(Rook) 
-	   && cb.board[0][this->field->rank]->inStartingPos){
+	/* Queen-side Castle */
+
+	//white
+	if(this->inStartingPos && field.file==2 && field.rank==0
+	   && cb.board[0][0] != nullptr
+	   && typeid(*cb.board[0][0])==typeid(Rook) 
+	   && cb.board[0][0]->inStartingPos){
+		return true;
+	}
+	//black
+	if(this->inStartingPos && field.file==2 && field.rank==7
+	   && cb.board[0][7] != nullptr
+	   && typeid(*cb.board[0][7])==typeid(Rook) 
+	   && cb.board[0][7]->inStartingPos){
 		return true;
 	}
 
-	//king-side castle
-	if(this->inStartingPos && field.file==6
-	   && cb.board[7][this->field->rank] != nullptr
-	   && typeid(*cb.board[7][this->field->rank])==typeid(Rook) 
-	   && cb.board[7][this->field->rank]->inStartingPos){
+
+	/* King-side Castle */
+	
+	//white
+	if(this->inStartingPos && field.file==6 && field.rank==0
+	   && cb.board[7][0] != nullptr
+	   && typeid(*cb.board[7][0])==typeid(Rook) 
+	   && cb.board[7][0]->inStartingPos){
+		return true;
+	}
+
+	//black
+	if(this->inStartingPos && field.file==6 && field.rank==7
+	   && cb.board[7][7] != nullptr
+	   && typeid(*cb.board[7][7])==typeid(Rook) 
+	   && cb.board[7][7]->inStartingPos){
 		return true;
 	}
 
 	return false;
 }
 
+
+/* Returns a new piece after moving it. Needed so we could access
+   the functionality from a pointer of ChessPiece* type instead of
+   checking typeof for every piece. */
 ChessPiece* King::movedPiece(PlayerColor color, Field* dest){
     return new King(color, dest);
 }
 
-//Utility
+
+/* UTILITY */
+
 string King::toString() const{
 	string res = "K";
 	return res;
 }
 
 
-//Display
+
+/* DISPLAY */
+
 void King::display(int file, int rank){
 	glPushMatrix();
 		ChessPiece::setMats();

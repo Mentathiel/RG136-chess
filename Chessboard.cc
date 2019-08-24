@@ -2,6 +2,8 @@
 
 using namespace std;
 
+/* CONSTRUCTORS */
+
 Chessboard::Chessboard(){
 	initializeBoard();
 }
@@ -19,7 +21,11 @@ void Chessboard::print() const{
 
 }
 
+
+/* CHESS LOGIC */
+
 void Chessboard::updateAttacked(){
+	// initialize all fields to not attacked
 	for(int i=0; i<8; i++){
 		for(int j=0; j<8; j++){
 			attackedByWhite[i][j] = false;
@@ -27,11 +33,15 @@ void Chessboard::updateAttacked(){
 		}
 	}
 
+	// check the entire chessboard
 	for(int i=0; i<8; i++){
 		for(int j=0; j<8; j++){
 			if(board[i][j] != nullptr){
+				// if a player of this color
 				PlayerColor color = board[i][j]->getColor();
+				// has a legitimate move to this field
 				list<Field*> li = board[i][j]->getPlayableMoves(*this);
+				// then he is attacking this field
 				for(Field* f : li){
 					if(color == PlayerColor::White){
 						attackedByWhite[f->file][f->rank] = true;
@@ -39,12 +49,13 @@ void Chessboard::updateAttacked(){
 					else if(color == PlayerColor::Black){
 						attackedByBlack[f->file][f->rank] = true;
 					}
-					//delete f;
+					delete f;
 				}
 			}
 		}
 	}
 }
+
 
 void Chessboard::initializeBoard(){
 	toMove = PlayerColor::White;
@@ -88,6 +99,9 @@ void Chessboard::initializeBoard(){
 	board[4][7] = new King(PlayerColor::Black, 4, 7);
 }
 
+
+/* CHESS LOGIC */
+
 bool Chessboard::operator==(const Chessboard& a){
 	if(typeid(*this->pawnMovedLast) != typeid(*a.pawnMovedLast)
 	   || this->toMove != a.toMove)
@@ -123,10 +137,13 @@ bool Chessboard::operator!=(const Chessboard& a){
 	return false;
 }
 
+
+/* DISPLAY */
+
 void Chessboard::display(int file, int rank, bool selected, int selFile, int selRank){
 	glDisable(GL_LIGHTING);
 
-	//lower left
+	// lower left quadrant
 	for(int i=4; i>0; i--){
 		for(int j=4; j>0; j--){
 		    glPushMatrix();
@@ -151,7 +168,7 @@ void Chessboard::display(int file, int rank, bool selected, int selFile, int sel
 		    glPopMatrix();
 		}
 	}
-	//upper right
+	// upper right  quadrant
 	for(int i=4; i<8; i++){
 		for(int j=4; j<8; j++){
 		    glPushMatrix();
@@ -177,7 +194,7 @@ void Chessboard::display(int file, int rank, bool selected, int selFile, int sel
 		}
 	}
 
-	//lower right
+	// lower right  quadrant
 	for(int i=4; i<8; i++){
 		for(int j=4; j>0; j--){
 		    glPushMatrix();
@@ -203,7 +220,7 @@ void Chessboard::display(int file, int rank, bool selected, int selFile, int sel
 		}
 	}
 
-	//upper left
+	// upper left  quadrant
 	for(int i=4; i>0; i--){
 		for(int j=4; j<8; j++){
 		    glPushMatrix();

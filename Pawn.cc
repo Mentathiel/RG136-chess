@@ -1,13 +1,14 @@
 #include "chess.hpp"
 
-//Constructors
+/* CONSTRUCTORS */
+
 Pawn::Pawn(PlayerColor color, int file, int rank) : ChessPiece(color,file,rank){}
 
 Pawn::Pawn(PlayerColor color, Field* field) : ChessPiece(color,field){}
 
-//Chess Related
+/* CHESS RELATED */
+
 list<Field*> Pawn::getPlayableMoves(Chessboard cb){
-	//TODO: Move would open check
 
 	list<Field*> res;
 	Field* field;
@@ -35,17 +36,17 @@ bool Pawn::checkIfLegal(Field field, Chessboard cb){
 	}
 
 
-		 //moving forward one square
+		 /* Moving one square forward... */
 	if(( (rankDiff==1 && fileDiff==0 
 		 	&& !friendlyPieceOnField(field,cb) && !enemyPieceOnField(field,cb))
-		 //or eating
+		 /* or eating... */
 		 || (rankDiff==1 && (fileDiff==1 || fileDiff == -1) 
 		 		&& enemyPieceOnField(field,cb)) 
-		 //moving forward two squares if at starting position
+		 /* or moving two squares forward if in starting position... */
 		 || (rankDiff==2 && field.file == this->field->file 
 		 	&& (this->field->rank==1 || this->field->rank==6)
 		 	&& !enemyPieceOnField(field,cb))
-		 //en passant
+		 /* or En Passant. */
 		 || (cb.pawnMovedLast != nullptr 
 		 	 && *(cb.pawnMovedLast->field) == field
 		 	 && cb.pawnMovedLast->field->rank == this->field->rank
@@ -58,17 +59,25 @@ bool Pawn::checkIfLegal(Field field, Chessboard cb){
 
 }
 
+
+/* Returns a new piece after moving it. Needed so we could access
+   the functionality from a pointer of ChessPiece* type instead of
+   checking typeof for every piece. */
 ChessPiece* Pawn::movedPiece(PlayerColor color, Field* dest){
     return new Pawn(color, dest);
 }
 
-//Utility
+
+/* UTILITY */
+
 string Pawn::toString() const{
 	string res = "p";
 	return res;
 }
 
-//Display
+
+/* DISPLAY */
+
 void Pawn::display(int file, int rank){
 	glPushMatrix();
 		ChessPiece::setMats();

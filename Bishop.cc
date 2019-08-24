@@ -1,24 +1,37 @@
 #include "chess.hpp"
 
-//Constructors
+/* CONSTRUCTORS */
+
 Bishop::Bishop(PlayerColor color, int file, int rank) : ChessPiece(color,file,rank){}
 
 Bishop::Bishop(PlayerColor color, Field* field) : ChessPiece(color,field){}
 
-//Chess Related
+
+/* CHESS RELATED */
+
 list<Field*> Bishop::getPlayableMoves(Chessboard cb){
-	//TODO: Move would open check
+
+	// result variable
 	list<Field*> res;
+	// current field that we're checking
 	Field* field;
 	
-	//moving diagonally
+	/* Moving diagonally, we stop: 
+	   - when we encounter a piece
+	   -- friendly means we can't go to that field
+	   -- enemy we can eat, but can't go further
+	   - on the edge of the board */
 
+	/* bools to tell us whether we've encountered
+	   a piece in a particular direction */
 	bool downRight = false;
 	bool downLeft  = false;
 	bool upRight   = false;
 	bool upLeft    = false;
 
+	// i is the diagonal distance from the current position
 	for(int i=1; i<8; i++){
+		// moving down left
 		if(!downLeft && this->field->file-i >= 0 && this->field->rank-i >=0){
 			field = new Field(this->field->file-i,this->field->rank-i);
 			if(ChessPiece::friendlyPieceOnField(*field,cb)){
@@ -32,6 +45,7 @@ list<Field*> Bishop::getPlayableMoves(Chessboard cb){
 			else
 				res.push_back(field);			
 		}
+		// moving up left
 		if(!upLeft && this->field->file-i >= 0 && this->field->rank+i < 8){
 			field = new Field(this->field->file-i,this->field->rank+i);
 			if(ChessPiece::friendlyPieceOnField(*field,cb)){
@@ -45,6 +59,7 @@ list<Field*> Bishop::getPlayableMoves(Chessboard cb){
 			else
 				res.push_back(field);			
 		}
+		// moving up right
 		if(!upRight && this->field->file+i < 8 && this->field->rank+i < 8){
 			field = new Field(this->field->file+i,this->field->rank+i);
 			if(ChessPiece::friendlyPieceOnField(*field,cb)){
@@ -58,6 +73,7 @@ list<Field*> Bishop::getPlayableMoves(Chessboard cb){
 			else
 				res.push_back(field);			
 		}
+		// moving down right
 		if(!downRight && this->field->file+i < 8 && this->field->rank-i >= 0){
 			field = new Field(this->field->file+i,this->field->rank-i);
 			if(ChessPiece::friendlyPieceOnField(*field,cb)){
@@ -76,7 +92,12 @@ list<Field*> Bishop::getPlayableMoves(Chessboard cb){
 	return res;
 }
 
+
 bool Bishop::checkIfLegal(Field field, Chessboard cb){
+
+	/* If the move is within this piece's list of playable moves,
+	   it is a legal move.*/
+	
 	list<Field*> playable = this->getPlayableMoves(cb);
 	bool res = false;
 	for(Field* move : playable){
@@ -88,17 +109,24 @@ bool Bishop::checkIfLegal(Field field, Chessboard cb){
 	return res;
 }
 
+/* Returns a new piece after moving it. Needed so we could access
+   the functionality from a pointer of ChessPiece* type instead of
+   checking typeof for every piece. */
 ChessPiece* Bishop::movedPiece(PlayerColor color, Field* dest){
     return new Bishop(color, dest);
 }
 
-//Utility
+
+/* UTILITY */
+
 string Bishop::toString() const{
 	string res = "B";
 	return res;
 }
 
-//Display
+
+/* DISPLAY */
+
 void Bishop::display(int file, int rank){
 	glPushMatrix();
 		ChessPiece::setMats();

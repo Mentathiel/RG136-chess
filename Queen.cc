@@ -1,17 +1,25 @@
 #include "chess.hpp"
 
-//Constructors
+/* CONSTRUCTORS */
+
 Queen::Queen(PlayerColor color, int file, int rank) : ChessPiece(color,file,rank){}
 
 Queen::Queen(PlayerColor color, Field* field) : ChessPiece(color,field){}
 
-//Chess Related
+
+/* CHESS RELATED */
+
 list<Field*> Queen::getPlayableMoves(Chessboard cb){
-	//TODO: Move would open check
 	list<Field*> res;
 	Field* field;
 
-	//moving horizontally
+	/* Moving horizonally/vertically, we stop: 
+	   - when we encounter a piece
+	   -- friendly means we can't go to that field
+	   -- enemy we can eat, but can't go further
+	   - on the edge of the board */
+
+	// moving down
 	for(int i=this->field->rank-1; i>=0; i--){
 		field = new Field(this->field->file, i);
 		if(ChessPiece::friendlyPieceOnField(*field,cb)){
@@ -24,6 +32,7 @@ list<Field*> Queen::getPlayableMoves(Chessboard cb){
 		}
 		res.push_back(field);
 	}
+	// moving up
 	for(int i=this->field->rank+1; i<8; i++){
 		field = new Field(this->field->file, i);
 		if(ChessPiece::friendlyPieceOnField(*field,cb)){
@@ -37,7 +46,7 @@ list<Field*> Queen::getPlayableMoves(Chessboard cb){
 		res.push_back(field);
 	}
 
-	//moving vertically
+	// moving left
 	for(int i=this->field->file-1; i>=0; i--){
 		field = new Field(i, this->field->rank);
 		if(ChessPiece::friendlyPieceOnField(*field,cb)){
@@ -50,6 +59,7 @@ list<Field*> Queen::getPlayableMoves(Chessboard cb){
 		}
 		res.push_back(field);
 	}
+	// moving right
 	for(int i=this->field->file+1; i<8; i++){
 		field = new Field(i, this->field->rank);
 		if(ChessPiece::friendlyPieceOnField(*field,cb)){
@@ -63,15 +73,25 @@ list<Field*> Queen::getPlayableMoves(Chessboard cb){
 		res.push_back(field);
 	}
 
+	return res;
 
-	//moving diagonally
 
+	/* Moving diagonally, we stop: 
+	   - when we encounter a piece
+	   -- friendly means we can't go to that field
+	   -- enemy we can eat, but can't go further
+	   - on the edge of the board */
+
+	/* bools to tell us whether we've encountered
+	   a piece in a particular direction */
 	bool downRight = false;
 	bool downLeft  = false;
 	bool upRight   = false;
 	bool upLeft    = false;
 
+	// i is the diagonal distance from the current position
 	for(int i=1; i<8; i++){
+		// moving down left
 		if(!downLeft && this->field->file-i >= 0 && this->field->rank-i >=0){
 			field = new Field(this->field->file-i,this->field->rank-i);
 			if(ChessPiece::friendlyPieceOnField(*field,cb)){
@@ -85,6 +105,7 @@ list<Field*> Queen::getPlayableMoves(Chessboard cb){
 			else
 				res.push_back(field);			
 		}
+		// moving up left
 		if(!upLeft && this->field->file-i >= 0 && this->field->rank+i < 8){
 			field = new Field(this->field->file-i,this->field->rank+i);
 			if(ChessPiece::friendlyPieceOnField(*field,cb)){
@@ -98,6 +119,7 @@ list<Field*> Queen::getPlayableMoves(Chessboard cb){
 			else
 				res.push_back(field);			
 		}
+		// moving up right
 		if(!upRight && this->field->file+i < 8 && this->field->rank+i < 8){
 			field = new Field(this->field->file+i,this->field->rank+i);
 			if(ChessPiece::friendlyPieceOnField(*field,cb)){
@@ -111,6 +133,7 @@ list<Field*> Queen::getPlayableMoves(Chessboard cb){
 			else
 				res.push_back(field);			
 		}
+		// moving down right
 		if(!downRight && this->field->file+i < 8 && this->field->rank-i >= 0){
 			field = new Field(this->field->file+i,this->field->rank-i);
 			if(ChessPiece::friendlyPieceOnField(*field,cb)){
@@ -130,6 +153,10 @@ list<Field*> Queen::getPlayableMoves(Chessboard cb){
 }
 
 bool Queen::checkIfLegal(Field field, Chessboard cb){
+
+	/* If the move is within this piece's list of playable moves,
+	   it is a legal move.*/
+
 	list<Field*> playable = this->getPlayableMoves(cb);
 	bool res = false;
 	for(Field* move : playable){
@@ -141,17 +168,25 @@ bool Queen::checkIfLegal(Field field, Chessboard cb){
 	return res;
 }
 
+
+/* Returns a new piece after moving it. Needed so we could access
+   the functionality from a pointer of ChessPiece* type instead of
+   checking typeof for every piece. */
 ChessPiece* Queen::movedPiece(PlayerColor color, Field* dest){
     return new Queen(color, dest);
 }
 
-//Utility
+
+/* UTILITY */
+
 string Queen::toString() const{
 	string res = "Q";
 	return res;
 }
 
-//Display
+
+/* DISPLAY */
+
 void Queen::display(int file, int rank){
 	glPushMatrix();
 		ChessPiece::setMats();

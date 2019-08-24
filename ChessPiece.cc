@@ -2,6 +2,9 @@
 
 using namespace std;
 
+
+/* CONSTRUCTORS */
+
 ChessPiece::ChessPiece() : color(PlayerColor::White) {}
 
 ChessPiece::ChessPiece(PlayerColor color, int file, int rank) : color(color) {
@@ -11,47 +14,46 @@ ChessPiece::ChessPiece(PlayerColor color, int file, int rank) : color(color) {
 ChessPiece::ChessPiece(PlayerColor color, Field* field)
                        : color(color), field(field) {}
 
-ostream& operator<<(ostream& out, const ChessPiece& cp)
-{
-    if(cp.getColor() == PlayerColor::White)
-        out << "W";
-    else
-        out << "B";
 
-    out << cp.toString();
-
-    out << cp.field->toString();
-
-    return out;
-}
+/* CHESS RELATED */
 
 bool ChessPiece::friendlyPieceOnField(Field field, Chessboard cb){
+    // if the field is not empty
     if(cb.board[field.file][field.rank] != nullptr){
+        // and its color is the same as the color of
+        //the piece calling the function
         if(cb.board[field.file][field.rank]->getColor() == this->color)
-            return true;
+            return true; // friendly piece on field
         else 
-            return false;
+            return false; // enemy piece on field
     }
 
+    // field empty
     return false;
 }
 
 bool ChessPiece::enemyPieceOnField(Field field, Chessboard cb){
-
+    // if the field is not empty
     if(cb.board[field.file][field.rank] != nullptr){
+        // and its color is the opposite of the color of
+        //the piece calling the function
         if(cb.board[field.file][field.rank]->getColor() != this->color)
-            return true;
+            return true; // enemy piece on field
         else 
-            return false;
+            return false; // friendly piece on field
     }
 
+    // field empty
     return false;
 }
 
 bool ChessPiece::fieldAttackedOrOccupied(Field field, Chessboard cb){
 
+    // if occupied by friendly
     if(friendlyPieceOnField(field, cb))
         return true;
+
+    // if attacked
 
     if(this->color == PlayerColor::White){
         if(cb.attackedByBlack[field.file][field.rank])
@@ -62,16 +64,13 @@ bool ChessPiece::fieldAttackedOrOccupied(Field field, Chessboard cb){
             return true;
     }
 
+    // if neither
+
     return false;
 }
 
-PlayerColor ChessPiece::getColor() const {
-    return this->color;
-};
 
-string ChessPiece::getName() const{
-    return this->name;
-};
+/* VIRTUAL FUNCTIONS */
 
 ChessPiece* ChessPiece::movedPiece(PlayerColor color, Field* dest){
     return new ChessPiece(color, dest);
@@ -91,13 +90,42 @@ bool ChessPiece::checkIfLegal(Move* move, Chessboard cb){
 }
 
 
-//Utility
+/* GETTERS */
+
+PlayerColor ChessPiece::getColor() const {
+    return this->color;
+};
+
+string ChessPiece::getName() const{
+    return this->name;
+};
+
+
+/* UTILITY */
+
 void ChessPiece::print() const{
     cout << this;
 };
 
 string ChessPiece::toString() const{
     return "";
+}
+
+
+/* OPERATOR OVERLOADING */
+
+ostream& operator<<(ostream& out, const ChessPiece& cp)
+{
+    if(cp.getColor() == PlayerColor::White)
+        out << "W";
+    else
+        out << "B";
+
+    out << cp.toString();
+
+    out << cp.field->toString();
+
+    return out;
 }
 
 

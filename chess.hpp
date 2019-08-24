@@ -27,6 +27,10 @@ enum PlayerColor{
 	Black
 };
 
+
+/* Class for parsing Wavefront .obj files, which hasn't ended up
+   in the finished project because of bugs, but is here in hopes
+   I fix it one day. */
 class ObjHandler{
 	public:
 		~ObjHandler();
@@ -54,11 +58,15 @@ class ObjHandler{
 		static vector<int*> tokenizeF(string s);
 };
 
+
+/* This is a class which will contain current state of the game,
+   as well as all of the functions for player interaction with
+   the game. */
 class Game{
 	public:
 		Game();
 		Game(Chessboard* cb);
-		
+
 		Chessboard* cb;
 		int movesSinceCapturePawnMove = 0;
 		bool gameFinished = false;
@@ -68,12 +76,11 @@ class Game{
 
 		Move undoMove(void);
 
-		bool checkForCheck(PlayerColor color);
 		bool checkForCheck();
+		bool checkForCheck(PlayerColor color);
 		bool checkForDraw();
 		bool checkForMate();
 		void checkState();
-
 
 		void selectField();
 		bool pickingMove();
@@ -89,6 +96,9 @@ class Game{
 		//TODO: unordered_map<Chessboard*, int> positionCount;
 };
 
+/* A class containing informations about a field, namely
+   its rank, file, and toString() function converting it into its
+   proper chess notation. */
 class Field {
 	public:
 		Field(){}
@@ -105,6 +115,9 @@ class Field {
 		bool operator!=(const Field& a);
 };
 
+/* A class containing one move, including field from whicha and to
+   which we're moving a piece, piece that we're moving, and a possible
+   piece that we're eating. Eaten piece is necessary for undoing moves. */
 class Move{
 	public:
 		Move(Field* dest, ChessPiece* moving, Chessboard cb);
@@ -117,6 +130,10 @@ class Move{
 		string toString(void);
 };
 
+/* An parent class to all pieces, containing all of their shared info.
+   Contains current state of a piece, its color and name, virtual functions
+   for determening legal moves with that piece, setting materials for and
+   displaying chess pieces on the board. */
 class ChessPiece {
 	public:
 		//Constructors
@@ -161,10 +178,13 @@ class ChessPiece {
 };
 
 
+/* The class containing the chessboard with pieces on it, info on attacked
+   fields, player whose turn it is, displaying the board itself, initializing
+   the starting position. */
 class Chessboard {
 	public:
 		Chessboard();
-		ChessPiece* board[8][8];
+		ChessPiece* board[8][8]; //nullptr if no piece is on the field
 		bool attackedByWhite[8][8];
 		bool attackedByBlack[8][8];
 		ChessPiece* pawnMovedLast = nullptr;
@@ -181,6 +201,8 @@ class Chessboard {
 		bool operator!=(const Chessboard& a);
 };
 
+
+/* DECLARATION OF INDIVIDUAL PIECES */
 
 class King : public ChessPiece {
 	public:
