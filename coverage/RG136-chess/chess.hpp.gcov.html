@@ -1,0 +1,389 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage.info - RG136-chess/chess.hpp</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">RG136-chess</a> - chess.hpp<span style="font-size: 80%;"> (source / <a href="chess.hpp.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntryLo">66.7 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2021-04-30 13:25:06</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntryLo">66.7 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : #include &lt;string&gt;</a>
+<span class="lineNum">       2 </span>            : #include &lt;iostream&gt;
+<span class="lineNum">       3 </span>            : #include &lt;stdio.h&gt;
+<span class="lineNum">       4 </span>            : #include &lt;stdlib.h&gt;
+<span class="lineNum">       5 </span>            : #include &lt;list&gt;
+<span class="lineNum">       6 </span>            : #include &lt;algorithm&gt;
+<span class="lineNum">       7 </span>            : #include &lt;typeinfo&gt;
+<span class="lineNum">       8 </span>            : #include &lt;vector&gt;
+<span class="lineNum">       9 </span>            : #include &lt;GL/glut.h&gt;
+<span class="lineNum">      10 </span>            : 
+<span class="lineNum">      11 </span>            : using namespace std;
+<span class="lineNum">      12 </span>            : 
+<span class="lineNum">      13 </span>            : class Field;
+<span class="lineNum">      14 </span>            : class Move;
+<span class="lineNum">      15 </span>            : class Chessboard;
+<span class="lineNum">      16 </span>            : class ChessPiece;
+<span class="lineNum">      17 </span>            : class King;
+<span class="lineNum">      18 </span>            : class Queen;
+<span class="lineNum">      19 </span>            : class Rook;
+<span class="lineNum">      20 </span>            : class Knight;
+<span class="lineNum">      21 </span>            : class Bishop;
+<span class="lineNum">      22 </span>            : class Pawn;
+<span class="lineNum">      23 </span>            : class ObjHandler;
+<span class="lineNum">      24 </span>            : 
+<span class="lineNum">      25 </span>            : enum PlayerColor{
+<span class="lineNum">      26 </span>            :         White,
+<span class="lineNum">      27 </span>            :         Black
+<span class="lineNum">      28 </span>            : };
+<span class="lineNum">      29 </span>            : 
+<span class="lineNum">      30 </span>            : 
+<span class="lineNum">      31 </span>            : /* Class for parsing Wavefront .obj files, which hasn't ended up
+<span class="lineNum">      32 </span>            :    in the finished project because of bugs, but is here in hopes
+<span class="lineNum">      33 </span>            :    I fix it one day. */
+<span class="lineNum">      34 </span>            : class ObjHandler{
+<span class="lineNum">      35 </span>            :         public:
+<span class="lineNum">      36 </span>            :                 ~ObjHandler();
+<span class="lineNum">      37 </span>            :                 void loadModel(const char* fileName);
+<span class="lineNum">      38 </span>            : 
+<span class="lineNum">      39 </span>            :                 void draw();
+<span class="lineNum">      40 </span>            :                 
+<span class="lineNum">      41 </span>            :                 typedef struct Vector3f{
+<span class="lineNum">      42 </span>            :                         float x;
+<span class="lineNum">      43 </span>            :                         float y;
+<span class="lineNum">      44 </span>            :                         float z;
+<span class="lineNum">      45 </span>            :                 } Vector3f;
+<span class="lineNum">      46 </span>            : 
+<span class="lineNum">      47 </span>            :                 typedef struct Vector2f{
+<span class="lineNum">      48 </span>            :                         float x;
+<span class="lineNum">      49 </span>            :                         float y;
+<span class="lineNum">      50 </span>            :                 } Vector2f;
+<span class="lineNum">      51 </span>            : 
+<span class="lineNum">      52 </span>            :         private:
+<span class="lineNum">      53 </span>            :             vector&lt;Vector3f*&gt; vertices;
+<span class="lineNum">      54 </span>            :             //vector&lt;Vector2f&gt; textureOrd;
+<span class="lineNum">      55 </span>            :         vector&lt;int*&gt; indices;
+<span class="lineNum">      56 </span>            :             vector&lt;Vector3f*&gt; normalsOrd;
+<span class="lineNum">      57 </span>            : 
+<span class="lineNum">      58 </span>            :                 static vector&lt;int*&gt; tokenizeF(string s);
+<span class="lineNum">      59 </span>            : };
+<span class="lineNum">      60 </span>            : 
+<span class="lineNum">      61 </span>            : 
+<span class="lineNum">      62 </span>            : /* This is a class which will contain current state of the game,
+<a name="63"><span class="lineNum">      63 </span>            :    as well as all of the functions for player interaction with</a>
+<span class="lineNum">      64 </span>            :    the game. */
+<span class="lineNum">      65 </span><span class="lineNoCov">          0 : class Game{</span>
+<span class="lineNum">      66 </span>            :         public:
+<span class="lineNum">      67 </span>            :                 Game();
+<span class="lineNum">      68 </span>            :                 Game(Chessboard* cb);
+<span class="lineNum">      69 </span>            : 
+<span class="lineNum">      70 </span>            :                 Chessboard* cb;
+<span class="lineNum">      71 </span>            :                 int movesSinceCapturePawnMove = 0;
+<span class="lineNum">      72 </span>            :                 bool gameFinished = false;
+<span class="lineNum">      73 </span>            : 
+<span class="lineNum">      74 </span>            :                 void playMove(Move* move);
+<span class="lineNum">      75 </span>            :                 void playMove(Field* dest, ChessPiece* moving);
+<span class="lineNum">      76 </span>            : 
+<span class="lineNum">      77 </span>            :                 Move undoMove(void);
+<span class="lineNum">      78 </span>            : 
+<span class="lineNum">      79 </span>            :                 bool checkForCheck();
+<span class="lineNum">      80 </span>            :                 bool checkForCheck(PlayerColor color);
+<span class="lineNum">      81 </span>            :                 bool checkForDraw();
+<span class="lineNum">      82 </span>            :                 bool checkForMate();
+<span class="lineNum">      83 </span>            :                 void checkState();
+<span class="lineNum">      84 </span>            : 
+<span class="lineNum">      85 </span>            :                 void selectField();
+<span class="lineNum">      86 </span>            :                 bool pickingMove();
+<span class="lineNum">      87 </span>            : 
+<span class="lineNum">      88 </span>            :                 int selFile = 0;
+<span class="lineNum">      89 </span>            :                 int selRank = 0;
+<span class="lineNum">      90 </span>            : 
+<span class="lineNum">      91 </span>            :                 void display(int file, int rank);
+<span class="lineNum">      92 </span>            : 
+<span class="lineNum">      93 </span>            :         private:
+<span class="lineNum">      94 </span>            :                 bool selected = false;
+<span class="lineNum">      95 </span>            :                 list&lt;Move*&gt; moveHistory;
+<span class="lineNum">      96 </span>            :                 //TODO: unordered_map&lt;Chessboard*, int&gt; positionCount;
+<span class="lineNum">      97 </span>            : };
+<span class="lineNum">      98 </span>            : 
+<span class="lineNum">      99 </span>            : /* A class containing informations about a field, namely
+<span class="lineNum">     100 </span>            :    its rank, file, and toString() function converting it into its
+<span class="lineNum">     101 </span>            :    proper chess notation. */
+<span class="lineNum">     102 </span>            : class Field {
+<a name="103"><span class="lineNum">     103 </span>            :         public:</a>
+<span class="lineNum">     104 </span>            :                 Field(){}
+<span class="lineNum">     105 </span><span class="lineCov">      19973 :                 Field(int file, int rank) : file(file), rank(rank){}</span>
+<span class="lineNum">     106 </span>            : 
+<span class="lineNum">     107 </span>            :                 int file;
+<span class="lineNum">     108 </span>            :                 int rank;
+<span class="lineNum">     109 </span>            : 
+<span class="lineNum">     110 </span>            :                 string toString(void);
+<span class="lineNum">     111 </span>            : 
+<span class="lineNum">     112 </span>            :                 static string fileName(int n);
+<span class="lineNum">     113 </span>            : 
+<span class="lineNum">     114 </span>            :                 bool operator==(const Field&amp; a);
+<span class="lineNum">     115 </span>            :                 bool operator!=(const Field&amp; a);
+<span class="lineNum">     116 </span>            : };
+<span class="lineNum">     117 </span>            : 
+<span class="lineNum">     118 </span>            : /* A class containing one move, including field from whicha and to
+<span class="lineNum">     119 </span>            :    which we're moving a piece, piece that we're moving, and a possible
+<span class="lineNum">     120 </span>            :    piece that we're eating. Eaten piece is necessary for undoing moves. */
+<span class="lineNum">     121 </span>            : class Move{
+<span class="lineNum">     122 </span>            :         public:
+<span class="lineNum">     123 </span>            :                 Move(Field* dest, ChessPiece* moving, Chessboard cb);
+<span class="lineNum">     124 </span>            : 
+<span class="lineNum">     125 </span>            :                 Field* from;
+<span class="lineNum">     126 </span>            :                 Field* dest;
+<span class="lineNum">     127 </span>            :                 ChessPiece* moving;
+<span class="lineNum">     128 </span>            :                 ChessPiece* eaten = nullptr;
+<span class="lineNum">     129 </span>            : 
+<span class="lineNum">     130 </span>            :                 string toString(void);
+<span class="lineNum">     131 </span>            : };
+<span class="lineNum">     132 </span>            : 
+<span class="lineNum">     133 </span>            : /* An parent class to all pieces, containing all of their shared info.
+<span class="lineNum">     134 </span>            :    Contains current state of a piece, its color and name, virtual functions
+<span class="lineNum">     135 </span>            :    for determening legal moves with that piece, setting materials for and
+<span class="lineNum">     136 </span>            :    displaying chess pieces on the board. */
+<span class="lineNum">     137 </span>            : class ChessPiece {
+<span class="lineNum">     138 </span>            :         public:
+<span class="lineNum">     139 </span>            :                 //Constructors
+<span class="lineNum">     140 </span>            :                 ChessPiece();
+<span class="lineNum">     141 </span>            :                 ChessPiece(PlayerColor color, int file, int rank);
+<span class="lineNum">     142 </span>            :                 ChessPiece(PlayerColor color, Field* field);
+<span class="lineNum">     143 </span>            : 
+<span class="lineNum">     144 </span>            :                 //Fields
+<span class="lineNum">     145 </span>            :                 Field* field;
+<span class="lineNum">     146 </span>            :                 bool onBoard = true;
+<span class="lineNum">     147 </span>            :                 bool inStartingPos = true;
+<span class="lineNum">     148 </span>            : 
+<span class="lineNum">     149 </span>            :                 //Chess Related
+<span class="lineNum">     150 </span>            :                 virtual list&lt;Field*&gt; getPlayableMoves(Chessboard cb);
+<span class="lineNum">     151 </span>            :                 virtual bool checkIfLegal(Field field, Chessboard cb);
+<span class="lineNum">     152 </span>            :                 virtual ChessPiece* movedPiece(PlayerColor color, Field* dest);
+<span class="lineNum">     153 </span>            :                 bool checkIfLegal(Move* move, Chessboard cb);
+<span class="lineNum">     154 </span>            :                 bool friendlyPieceOnField(Field field, Chessboard cb);
+<span class="lineNum">     155 </span>            :                 bool enemyPieceOnField(Field field, Chessboard cb);
+<span class="lineNum">     156 </span>            :                 bool fieldAttackedOrOccupied(Field field, Chessboard cb);
+<span class="lineNum">     157 </span>            :                 
+<span class="lineNum">     158 </span>            :                 //Display
+<span class="lineNum">     159 </span>            :                 virtual void display(int file, int rank);
+<span class="lineNum">     160 </span>            :                 void setMats(void);
+<span class="lineNum">     161 </span>            : 
+<span class="lineNum">     162 </span>            :                 //Getters
+<span class="lineNum">     163 </span>            :                 PlayerColor getColor(void) const;
+<span class="lineNum">     164 </span>            :                 string getName(void) const;
+<span class="lineNum">     165 </span>            :                 
+<span class="lineNum">     166 </span>            :                 //Utility
+<span class="lineNum">     167 </span>            :                 void print(void) const;
+<span class="lineNum">     168 </span>            :                 virtual string toString(void) const;
+<span class="lineNum">     169 </span>            :                 
+<span class="lineNum">     170 </span>            :         protected:
+<span class="lineNum">     171 </span>            :                 //Fields
+<span class="lineNum">     172 </span>            :                 const PlayerColor color;
+<span class="lineNum">     173 </span>            :                 const string name;
+<span class="lineNum">     174 </span>            : 
+<span class="lineNum">     175 </span>            :         private:
+<span class="lineNum">     176 </span>            :                 //Utility
+<span class="lineNum">     177 </span>            :                 friend ostream&amp; operator&lt;&lt;(ostream&amp; out, const ChessPiece&amp; p);
+<span class="lineNum">     178 </span>            : };
+<span class="lineNum">     179 </span>            : 
+<span class="lineNum">     180 </span>            : 
+<span class="lineNum">     181 </span>            : /* The class containing the chessboard with pieces on it, info on attacked
+<a name="182"><span class="lineNum">     182 </span>            :    fields, player whose turn it is, displaying the board itself, initializing</a>
+<span class="lineNum">     183 </span>            :    the starting position. */
+<span class="lineNum">     184 </span><span class="lineCov">      22337 : class Chessboard {</span>
+<span class="lineNum">     185 </span>            :         public:
+<span class="lineNum">     186 </span>            :                 Chessboard();
+<span class="lineNum">     187 </span>            :                 ChessPiece* board[8][8]; //nullptr if no piece is on the field
+<span class="lineNum">     188 </span>            :                 bool attackedByWhite[8][8];
+<span class="lineNum">     189 </span>            :                 bool attackedByBlack[8][8];
+<span class="lineNum">     190 </span>            :                 ChessPiece* pawnMovedLast = nullptr;
+<span class="lineNum">     191 </span>            :                 PlayerColor toMove = PlayerColor::White;
+<span class="lineNum">     192 </span>            :                 void print(void) const;
+<span class="lineNum">     193 </span>            :                 void updateAttacked(void);
+<span class="lineNum">     194 </span>            : 
+<span class="lineNum">     195 </span>            :                 //Display
+<span class="lineNum">     196 </span>            :                 virtual void display(int file, int rank, bool selected, int selFile, int selRank);
+<span class="lineNum">     197 </span>            : 
+<span class="lineNum">     198 </span>            :         private:
+<span class="lineNum">     199 </span>            :                 void initializeBoard(void);
+<span class="lineNum">     200 </span>            :                 bool operator==(const Chessboard&amp; a);
+<span class="lineNum">     201 </span>            :                 bool operator!=(const Chessboard&amp; a);
+<span class="lineNum">     202 </span>            : };
+<span class="lineNum">     203 </span>            : 
+<span class="lineNum">     204 </span>            : 
+<span class="lineNum">     205 </span>            : /* DECLARATION OF INDIVIDUAL PIECES */
+<span class="lineNum">     206 </span>            : 
+<span class="lineNum">     207 </span>            : class King : public ChessPiece {
+<span class="lineNum">     208 </span>            :         public:
+<span class="lineNum">     209 </span>            :                 //Constructors
+<span class="lineNum">     210 </span>            :                 King(PlayerColor color, int file, int rank);
+<span class="lineNum">     211 </span>            :                 King(PlayerColor color, Field* field);
+<span class="lineNum">     212 </span>            : 
+<span class="lineNum">     213 </span>            :                 //Chess Related
+<span class="lineNum">     214 </span>            :                 list&lt;Field*&gt; getPlayableMoves(Chessboard cb);
+<span class="lineNum">     215 </span>            :                 bool checkIfLegal(Field field, Chessboard cb);
+<span class="lineNum">     216 </span>            :                 ChessPiece* movedPiece(PlayerColor color, Field* dest);
+<span class="lineNum">     217 </span>            :                 
+<span class="lineNum">     218 </span>            :                 //Display
+<span class="lineNum">     219 </span>            :                 void display(int file, int rank);
+<span class="lineNum">     220 </span>            : 
+<span class="lineNum">     221 </span>            :                 //Utility
+<span class="lineNum">     222 </span>            :                 string toString(void) const;
+<span class="lineNum">     223 </span>            : };
+<span class="lineNum">     224 </span>            : 
+<span class="lineNum">     225 </span>            : class Queen : public ChessPiece {
+<span class="lineNum">     226 </span>            :         public:
+<span class="lineNum">     227 </span>            :                 //Constructors
+<span class="lineNum">     228 </span>            :                 Queen(PlayerColor color, int file, int rank);
+<span class="lineNum">     229 </span>            :                 Queen(PlayerColor color, Field* field);
+<span class="lineNum">     230 </span>            : 
+<span class="lineNum">     231 </span>            :                 //Chess Related
+<span class="lineNum">     232 </span>            :                 list&lt;Field*&gt; getPlayableMoves(Chessboard cb);
+<span class="lineNum">     233 </span>            :                 bool checkIfLegal(Field field, Chessboard cb);
+<span class="lineNum">     234 </span>            :                 ChessPiece* movedPiece(PlayerColor color, Field* dest);
+<span class="lineNum">     235 </span>            :                 
+<span class="lineNum">     236 </span>            :                 //Display
+<span class="lineNum">     237 </span>            :                 void display(int file, int rank);
+<span class="lineNum">     238 </span>            : 
+<span class="lineNum">     239 </span>            :                 //Utility
+<span class="lineNum">     240 </span>            :                 string toString(void) const;
+<span class="lineNum">     241 </span>            : };
+<span class="lineNum">     242 </span>            : 
+<span class="lineNum">     243 </span>            : class Rook : public ChessPiece {
+<span class="lineNum">     244 </span>            :         public:
+<span class="lineNum">     245 </span>            :                 //Constructors
+<span class="lineNum">     246 </span>            :                 Rook(PlayerColor color, int file, int rank);
+<span class="lineNum">     247 </span>            :                 Rook(PlayerColor color, Field* field);
+<span class="lineNum">     248 </span>            : 
+<span class="lineNum">     249 </span>            :                 //Chess Related
+<span class="lineNum">     250 </span>            :                 list&lt;Field*&gt; getPlayableMoves(Chessboard cb);
+<span class="lineNum">     251 </span>            :                 bool checkIfLegal(Field field, Chessboard cb);
+<span class="lineNum">     252 </span>            :                 ChessPiece* movedPiece(PlayerColor color, Field* dest);
+<span class="lineNum">     253 </span>            :                 
+<span class="lineNum">     254 </span>            :                 //Display
+<span class="lineNum">     255 </span>            :                 void display(int file, int rank);
+<span class="lineNum">     256 </span>            : 
+<span class="lineNum">     257 </span>            :                 //Utility
+<span class="lineNum">     258 </span>            :                 string toString(void) const;
+<span class="lineNum">     259 </span>            : };
+<span class="lineNum">     260 </span>            : 
+<span class="lineNum">     261 </span>            : class Knight : public ChessPiece {
+<span class="lineNum">     262 </span>            :         public:
+<span class="lineNum">     263 </span>            :                 //Constructors
+<span class="lineNum">     264 </span>            :                 Knight(PlayerColor color, int file, int rank);
+<span class="lineNum">     265 </span>            :                 Knight(PlayerColor color, Field* field);
+<span class="lineNum">     266 </span>            : 
+<span class="lineNum">     267 </span>            :                 //Chess Related
+<span class="lineNum">     268 </span>            :                 list&lt;Field*&gt; getPlayableMoves(Chessboard cb);
+<span class="lineNum">     269 </span>            :                 bool checkIfLegal(Field field, Chessboard cb);
+<span class="lineNum">     270 </span>            :                 ChessPiece* movedPiece(PlayerColor color, Field* dest);
+<span class="lineNum">     271 </span>            :                 
+<span class="lineNum">     272 </span>            :                 //Display
+<span class="lineNum">     273 </span>            :                 void display(int file, int rank);
+<span class="lineNum">     274 </span>            : 
+<span class="lineNum">     275 </span>            :                 //Utility
+<span class="lineNum">     276 </span>            :                 string toString(void) const;
+<span class="lineNum">     277 </span>            : };
+<span class="lineNum">     278 </span>            : 
+<span class="lineNum">     279 </span>            : class Bishop : public ChessPiece {
+<span class="lineNum">     280 </span>            :         public:
+<span class="lineNum">     281 </span>            :                 //Constructors
+<span class="lineNum">     282 </span>            :                 Bishop(PlayerColor color, int file, int rank);
+<span class="lineNum">     283 </span>            :                 Bishop(PlayerColor color, Field* field);
+<span class="lineNum">     284 </span>            : 
+<span class="lineNum">     285 </span>            :                 //Chess Related
+<span class="lineNum">     286 </span>            :                 list&lt;Field*&gt; getPlayableMoves(Chessboard cb);
+<span class="lineNum">     287 </span>            :                 bool checkIfLegal(Field field, Chessboard cb);
+<span class="lineNum">     288 </span>            :                 ChessPiece* movedPiece(PlayerColor color, Field* dest);
+<span class="lineNum">     289 </span>            : 
+<span class="lineNum">     290 </span>            :                 //Display
+<span class="lineNum">     291 </span>            :                 void display(int file, int rank);
+<span class="lineNum">     292 </span>            : 
+<span class="lineNum">     293 </span>            :                 //Utility
+<span class="lineNum">     294 </span>            :                 string toString(void) const;
+<span class="lineNum">     295 </span>            : };
+<span class="lineNum">     296 </span>            : 
+<span class="lineNum">     297 </span>            : class Pawn : public ChessPiece {
+<span class="lineNum">     298 </span>            :         public:
+<span class="lineNum">     299 </span>            :                 //Constructors
+<span class="lineNum">     300 </span>            :                 Pawn(PlayerColor color, int file, int rank);
+<span class="lineNum">     301 </span>            :                 Pawn(PlayerColor color, Field* field);
+<span class="lineNum">     302 </span>            : 
+<span class="lineNum">     303 </span>            :                 //Chess Related
+<span class="lineNum">     304 </span>            :                 list&lt;Field*&gt; getPlayableMoves(Chessboard cb);
+<span class="lineNum">     305 </span>            :                 bool checkIfLegal(Field field, Chessboard cb);
+<span class="lineNum">     306 </span>            :                 ChessPiece* movedPiece(PlayerColor color, Field* dest);
+<span class="lineNum">     307 </span>            : 
+<span class="lineNum">     308 </span>            :                 //Display
+<span class="lineNum">     309 </span>            :                 void display(int file, int rank);
+<span class="lineNum">     310 </span>            : 
+<span class="lineNum">     311 </span>            :                 //Utility
+<span class="lineNum">     312 </span>            :                 string toString(void) const;
+<span class="lineNum">     313 </span>            : };
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

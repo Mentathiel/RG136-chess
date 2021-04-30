@@ -1,0 +1,425 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage.info - RG136-chess/Game.cc</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">RG136-chess</a> - Game.cc<span style="font-size: 80%;"> (source / <a href="Game.cc.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">107</td>
+            <td class="headerCovTableEntry">171</td>
+            <td class="headerCovTableEntryLo">62.6 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2021-04-30 13:25:06</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">13</td>
+            <td class="headerCovTableEntry">15</td>
+            <td class="headerCovTableEntryMed">86.7 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : #include &quot;chess.hpp&quot;</a>
+<span class="lineNum">       2 </span>            : 
+<span class="lineNum">       3 </span>            : /* Field selected in main through the 
+<span class="lineNum">       4 </span>            :    visual interface. */
+<span class="lineNum">       5 </span>            : extern int selFieldFile;
+<span class="lineNum">       6 </span>            : extern int selFieldRank;
+<span class="lineNum">       7 </span>            : 
+<a name="8"><span class="lineNum">       8 </span>            : /* CONSTRUCTORS */</a>
+<span class="lineNum">       9 </span>            : 
+<span class="lineNum">      10 </span><span class="lineCov">          1 : Game::Game(){</span>
+<span class="lineNum">      11 </span><span class="lineCov">          1 :         cb = new Chessboard();</span>
+<a name="12"><span class="lineNum">      12 </span><span class="lineCov">          1 : }</span></a>
+<span class="lineNum">      13 </span>            : 
+<span class="lineNum">      14 </span><span class="lineNoCov">          0 : Game::Game(Chessboard* cb){</span>
+<span class="lineNum">      15 </span><span class="lineNoCov">          0 :         this-&gt;cb = cb;</span>
+<span class="lineNum">      16 </span><span class="lineNoCov">          0 : }</span>
+<span class="lineNum">      17 </span>            : 
+<span class="lineNum">      18 </span>            : 
+<a name="19"><span class="lineNum">      19 </span>            : /* CHESS RELATED */</a>
+<span class="lineNum">      20 </span>            : 
+<span class="lineNum">      21 </span><span class="lineCov">         34 : bool Game::checkForCheck(PlayerColor color){</span>
+<span class="lineNum">      22 </span>            :         // assume not checked
+<span class="lineNum">      23 </span><span class="lineCov">         34 :         bool checked = false;</span>
+<span class="lineNum">      24 </span>            : 
+<span class="lineNum">      25 </span>            :         // check entire board to find the king
+<span class="lineNum">      26 </span><span class="lineCov">        306 :         for(int i=0; i&lt;8; i++){</span>
+<span class="lineNum">      27 </span><span class="lineCov">       2448 :                 for(int j=0; j&lt;8; j++){</span>
+<span class="lineNum">      28 </span><span class="lineCov">       4352 :                         if(cb-&gt;board[i][j] != nullptr</span>
+<span class="lineNum">      29 </span><span class="lineCov">       1088 :                            &amp;&amp; typeid(*cb-&gt;board[i][j]) == typeid(King)</span>
+<span class="lineNum">      30 </span><span class="lineCov">       2244 :                            &amp;&amp; cb-&gt;board[i][j]-&gt;getColor() == color){</span>
+<span class="lineNum">      31 </span>            :                                 // if the king of respective color is checked, return true
+<span class="lineNum">      32 </span><span class="lineCov">         34 :                                 if(color == PlayerColor::White &amp;&amp; cb-&gt;attackedByBlack[i][j])</span>
+<span class="lineNum">      33 </span><span class="lineNoCov">          0 :                                         return true;</span>
+<span class="lineNum">      34 </span><span class="lineCov">         34 :                                 if(color == PlayerColor::Black &amp;&amp; cb-&gt;attackedByWhite[i][j])</span>
+<span class="lineNum">      35 </span><span class="lineNoCov">          0 :                                         return true;</span>
+<span class="lineNum">      36 </span>            :                         }
+<span class="lineNum">      37 </span>            :                 }
+<span class="lineNum">      38 </span>            :         }
+<span class="lineNum">      39 </span>            : 
+<span class="lineNum">      40 </span>            :         /* If we checked the whole board and the king wasn't
+<span class="lineNum">      41 </span>            :            checked, return false. */
+<span class="lineNum">      42 </span><span class="lineCov">         34 :         return false;</span>
+<span class="lineNum">      43 </span>            : }
+<span class="lineNum">      44 </span>            : 
+<span class="lineNum">      45 </span>            : 
+<a name="46"><span class="lineNum">      46 </span>            : /* Overloaded so it would call the function for the player</a>
+<span class="lineNum">      47 </span>            :    next to move by default. */
+<span class="lineNum">      48 </span><span class="lineCov">         17 : bool Game::checkForCheck(){</span>
+<span class="lineNum">      49 </span><span class="lineCov">         17 :         return checkForCheck(cb-&gt;toMove);</span>
+<span class="lineNum">      50 </span>            : }
+<span class="lineNum">      51 </span>            : 
+<a name="52"><span class="lineNum">      52 </span>            : </a>
+<span class="lineNum">      53 </span>            : 
+<span class="lineNum">      54 </span><span class="lineCov">         17 : bool Game::checkForMate(){</span>
+<span class="lineNum">      55 </span>            :         // the player has to be checked to be mated
+<span class="lineNum">      56 </span><span class="lineCov">         17 :         bool checked = checkForCheck();</span>
+<span class="lineNum">      57 </span>            : 
+<span class="lineNum">      58 </span>            :         // if he isn't checked, return false immediately
+<span class="lineNum">      59 </span><span class="lineCov">         17 :         if(!checked)</span>
+<span class="lineNum">      60 </span><span class="lineCov">         17 :                 return false;</span>
+<span class="lineNum">      61 </span>            : 
+<span class="lineNum">      62 </span>            :         /* Go through the entire board and record all possible moves
+<span class="lineNum">      63 </span>            :            for the player whose turn it is. */
+<span class="lineNum">      64 </span><span class="lineNoCov">          0 :         list&lt;Move*&gt; moves;</span>
+<span class="lineNum">      65 </span><span class="lineNoCov">          0 :         for(int i=0; i&lt;8; i++){</span>
+<span class="lineNum">      66 </span><span class="lineNoCov">          0 :                 for(int j=0; j&lt;8; j++){</span>
+<span class="lineNum">      67 </span><span class="lineNoCov">          0 :                         if(cb-&gt;board[i][j] != nullptr</span>
+<span class="lineNum">      68 </span><span class="lineNoCov">          0 :                            &amp;&amp; cb-&gt;board[i][j]-&gt;getColor() == cb-&gt;toMove){</span>
+<span class="lineNum">      69 </span>            : 
+<span class="lineNum">      70 </span><span class="lineNoCov">          0 :                                 list&lt;Field*&gt; li = cb-&gt;board[i][j]-&gt;getPlayableMoves(*cb);</span>
+<span class="lineNum">      71 </span><span class="lineNoCov">          0 :                                 if(!li.empty()){</span>
+<span class="lineNum">      72 </span><span class="lineNoCov">          0 :                                         for(Field* f : li)</span>
+<span class="lineNum">      73 </span><span class="lineNoCov">          0 :                                                 moves.push_back(new Move(f, cb-&gt;board[i][j], *cb));</span>
+<span class="lineNum">      74 </span>            : 
+<span class="lineNum">      75 </span>            :                                 }
+<span class="lineNum">      76 </span>            :                         }
+<span class="lineNum">      77 </span>            :                 }
+<span class="lineNum">      78 </span>            :         }
+<span class="lineNum">      79 </span>            : 
+<span class="lineNum">      80 </span>            :         /* Go through all the possible moves and see if you can find one
+<span class="lineNum">      81 </span>            :            that would result in the player not being checked anymore. If
+<span class="lineNum">      82 </span>            :            so, the player hasn't been mated. */
+<span class="lineNum">      83 </span><span class="lineNoCov">          0 :         PlayerColor color = cb-&gt;toMove;</span>
+<span class="lineNum">      84 </span><span class="lineNoCov">          0 :         for(Move* move : moves){</span>
+<span class="lineNum">      85 </span><span class="lineNoCov">          0 :                 playMove(move);</span>
+<span class="lineNum">      86 </span><span class="lineNoCov">          0 :                 if(!checkForCheck(color)){</span>
+<span class="lineNum">      87 </span><span class="lineNoCov">          0 :                         cout &lt;&lt; move-&gt;toString() &lt;&lt; endl &lt;&lt; endl;</span>
+<span class="lineNum">      88 </span><span class="lineNoCov">          0 :                         undoMove();</span>
+<span class="lineNum">      89 </span><span class="lineNoCov">          0 :                         return false;</span>
+<span class="lineNum">      90 </span>            :                 }
+<span class="lineNum">      91 </span><span class="lineNoCov">          0 :                 undoMove();</span>
+<span class="lineNum">      92 </span><span class="lineNoCov">          0 :                 delete move;</span>
+<span class="lineNum">      93 </span>            :         }
+<span class="lineNum">      94 </span><span class="lineNoCov">          0 :         return true;</span>
+<span class="lineNum">      95 </span>            : 
+<a name="96"><span class="lineNum">      96 </span>            : }</a>
+<span class="lineNum">      97 </span>            : 
+<span class="lineNum">      98 </span><span class="lineCov">         17 : bool Game::checkForDraw(){</span>
+<span class="lineNum">      99 </span>            :         
+<span class="lineNum">     100 </span>            :         /* Stalemate */
+<span class="lineNum">     101 </span><span class="lineCov">         17 :         bool stalemate = true;</span>
+<span class="lineNum">     102 </span><span class="lineCov">        153 :         for(int i=0; i&lt;8; i++){</span>
+<span class="lineNum">     103 </span><span class="lineCov">       1224 :                 for(int j=0; j&lt;8; j++){</span>
+<span class="lineNum">     104 </span><span class="lineCov">       2176 :                         if(cb-&gt;board[i][j] != nullptr</span>
+<span class="lineNum">     105 </span><span class="lineCov">        544 :                            &amp;&amp; typeid(*cb-&gt;board[i][j]) == typeid(King)</span>
+<span class="lineNum">     106 </span><span class="lineCov">       1122 :                            &amp;&amp; cb-&gt;board[i][j]-&gt;getColor() == cb-&gt;toMove){</span>
+<span class="lineNum">     107 </span><span class="lineCov">         17 :                                 if(cb-&gt;toMove == PlayerColor::White &amp;&amp; cb-&gt;attackedByBlack[i][j])</span>
+<span class="lineNum">     108 </span><span class="lineNoCov">          0 :                                         return false;</span>
+<span class="lineNum">     109 </span><span class="lineCov">         17 :                                 if(cb-&gt;toMove == PlayerColor::Black &amp;&amp; cb-&gt;attackedByWhite[i][j])</span>
+<span class="lineNum">     110 </span><span class="lineNoCov">          0 :                                         return false;</span>
+<span class="lineNum">     111 </span>            : 
+<span class="lineNum">     112 </span><span class="lineCov">         34 :                                 list&lt;Field*&gt; li = cb-&gt;board[i][j]-&gt;getPlayableMoves(*cb);</span>
+<span class="lineNum">     113 </span><span class="lineCov">         17 :                                 if(!li.empty()){</span>
+<span class="lineNum">     114 </span><span class="lineCov">         17 :                                         stalemate = false;</span>
+<span class="lineNum">     115 </span><span class="lineCov">        105 :                                         for(Field* f : li)</span>
+<span class="lineNum">     116 </span><span class="lineCov">         88 :                                                 delete f;</span>
+<span class="lineNum">     117 </span>            :                                 }
+<span class="lineNum">     118 </span>            : 
+<span class="lineNum">     119 </span>            :                         }
+<span class="lineNum">     120 </span>            :                 }
+<span class="lineNum">     121 </span>            :         }
+<span class="lineNum">     122 </span>            : 
+<span class="lineNum">     123 </span><span class="lineCov">         17 :         if(stalemate)</span>
+<span class="lineNum">     124 </span><span class="lineNoCov">          0 :                 return true;</span>
+<span class="lineNum">     125 </span>            : 
+<span class="lineNum">     126 </span>            :         //TODO: Threefold repetition
+<span class="lineNum">     127 </span>            : 
+<span class="lineNum">     128 </span>            :         /* 75 Move Rule 
+<span class="lineNum">     129 </span>            :            HACK: using playMove to check for opened check or
+<span class="lineNum">     130 </span>            :            checkmate can end the game with a draw a move early */
+<span class="lineNum">     131 </span><span class="lineCov">         17 :         if(movesSinceCapturePawnMove &gt;= 75)</span>
+<span class="lineNum">     132 </span><span class="lineNoCov">          0 :                 return true;</span>
+<span class="lineNum">     133 </span>            : 
+<span class="lineNum">     134 </span><span class="lineCov">         17 :         bool whiteKnight  = false;</span>
+<span class="lineNum">     135 </span><span class="lineCov">         17 :         bool blackKnight  = false;</span>
+<span class="lineNum">     136 </span><span class="lineCov">         17 :         bool whiteWBishop = false;</span>
+<span class="lineNum">     137 </span><span class="lineCov">         17 :         bool whiteBBishop = false;</span>
+<span class="lineNum">     138 </span><span class="lineCov">         17 :         bool blackWBishop = false;</span>
+<span class="lineNum">     139 </span><span class="lineCov">         17 :         bool blackBBishop = false;</span>
+<span class="lineNum">     140 </span><span class="lineCov">         17 :         int otherPieces = 0;</span>
+<span class="lineNum">     141 </span><span class="lineCov">        153 :         for(int i=0; i&lt;8; i++){</span>
+<span class="lineNum">     142 </span><span class="lineCov">       1224 :                 for(int j=0; j&lt;8; j++){</span>
+<span class="lineNum">     143 </span><span class="lineCov">       1088 :                         if(cb-&gt;board[i][j] != nullptr){</span>
+<span class="lineNum">     144 </span><span class="lineCov">        544 :                                 if(typeid(*cb-&gt;board[i][j]) == typeid(Knight)){</span>
+<span class="lineNum">     145 </span><span class="lineCov">         68 :                                         if(cb-&gt;board[i][j]-&gt;getColor() == PlayerColor::White)</span>
+<span class="lineNum">     146 </span><span class="lineCov">         34 :                                                 whiteKnight = true;</span>
+<span class="lineNum">     147 </span>            :                                         else
+<span class="lineNum">     148 </span><span class="lineCov">         34 :                                                 blackKnight = true;</span>
+<span class="lineNum">     149 </span>            :                                 }
+<span class="lineNum">     150 </span><span class="lineCov">        476 :                                 else if(typeid(*cb-&gt;board[i][j]) == typeid(Bishop)){</span>
+<span class="lineNum">     151 </span><span class="lineCov">         68 :                                         if(cb-&gt;board[i][j]-&gt;getColor() == PlayerColor::White){</span>
+<span class="lineNum">     152 </span><span class="lineCov">         34 :                                                 if((i-j)%2)</span>
+<span class="lineNum">     153 </span><span class="lineCov">         17 :                                                         whiteBBishop = true;</span>
+<span class="lineNum">     154 </span>            :                                                 else
+<span class="lineNum">     155 </span><span class="lineCov">         17 :                                                         whiteWBishop = true;</span>
+<span class="lineNum">     156 </span>            :                                         }
+<span class="lineNum">     157 </span>            :                                         else
+<span class="lineNum">     158 </span><span class="lineCov">         34 :                                                 if((i-j)%2)</span>
+<span class="lineNum">     159 </span><span class="lineCov">         17 :                                                         blackBBishop = true;</span>
+<span class="lineNum">     160 </span>            :                                                 else
+<span class="lineNum">     161 </span><span class="lineCov">         17 :                                                         blackWBishop = true;</span>
+<span class="lineNum">     162 </span>            :                                 }
+<span class="lineNum">     163 </span>            :                                 else
+<span class="lineNum">     164 </span><span class="lineCov">        408 :                                         otherPieces++;</span>
+<span class="lineNum">     165 </span>            :                         }
+<span class="lineNum">     166 </span>            :                 }
+<span class="lineNum">     167 </span>            :         }
+<span class="lineNum">     168 </span>            : 
+<span class="lineNum">     169 </span>            :         /* Draw by insufficient mating material
+<span class="lineNum">     170 </span>            :            - king versus king
+<span class="lineNum">     171 </span>            :            - king and bishop versus king
+<span class="lineNum">     172 </span>            :            - king and knight versus king
+<span class="lineNum">     173 </span>            :            - king and bishop versus king and bishop with the bishops on the same color.*/
+<span class="lineNum">     174 </span><span class="lineCov">         17 :         bool blackMatingMaterial = true;</span>
+<span class="lineNum">     175 </span><span class="lineCov">         17 :         bool whiteMatingMaterial = true;</span>
+<span class="lineNum">     176 </span><span class="lineCov">         17 :         if(otherPieces == 2){</span>
+<span class="lineNum">     177 </span><span class="lineNoCov">          0 :                 if(    (whiteKnight &amp;&amp; !whiteWBishop &amp;&amp; !whiteBBishop)</span>
+<span class="lineNum">     178 </span><span class="lineNoCov">          0 :                         || (!whiteKnight &amp;&amp; !whiteWBishop &amp;&amp; !whiteBBishop)</span>
+<span class="lineNum">     179 </span><span class="lineNoCov">          0 :                         || (whiteBBishop &amp;&amp; !whiteWBishop &amp;&amp; !blackWBishop)</span>
+<span class="lineNum">     180 </span><span class="lineNoCov">          0 :                         || (whiteWBishop &amp;&amp; !whiteBBishop &amp;&amp; !blackBBishop))</span>
+<span class="lineNum">     181 </span><span class="lineNoCov">          0 :                         whiteMatingMaterial = false;</span>
+<span class="lineNum">     182 </span><span class="lineNoCov">          0 :                 if(    (blackKnight &amp;&amp; !blackWBishop &amp;&amp; !blackBBishop)</span>
+<span class="lineNum">     183 </span><span class="lineNoCov">          0 :                         || (!blackKnight &amp;&amp; !blackWBishop &amp;&amp; !blackBBishop)</span>
+<span class="lineNum">     184 </span><span class="lineNoCov">          0 :                         || (blackBBishop &amp;&amp; !blackWBishop &amp;&amp; !whiteWBishop)</span>
+<span class="lineNum">     185 </span><span class="lineNoCov">          0 :                         || (blackWBishop &amp;&amp; !blackBBishop &amp;&amp; !whiteBBishop))</span>
+<span class="lineNum">     186 </span><span class="lineNoCov">          0 :                         blackMatingMaterial = false;</span>
+<span class="lineNum">     187 </span>            : 
+<span class="lineNum">     188 </span><span class="lineNoCov">          0 :                 if(!whiteMatingMaterial &amp;&amp; !blackMatingMaterial)</span>
+<span class="lineNum">     189 </span><span class="lineNoCov">          0 :                         return true;</span>
+<span class="lineNum">     190 </span>            :         }
+<span class="lineNum">     191 </span>            : 
+<span class="lineNum">     192 </span><span class="lineCov">         17 :         return false;</span>
+<span class="lineNum">     193 </span>            : }
+<span class="lineNum">     194 </span>            : 
+<span class="lineNum">     195 </span>            : 
+<a name="196"><span class="lineNum">     196 </span>            : /* Check if the game should end or if the player tried to play</a>
+<span class="lineNum">     197 </span>            :    an unrelated move while checked. */
+<span class="lineNum">     198 </span><span class="lineCov">         17 : void Game::checkState(){</span>
+<span class="lineNum">     199 </span><span class="lineCov">         17 :         if(gameFinished)</span>
+<span class="lineNum">     200 </span><span class="lineNoCov">          0 :                 return;</span>
+<span class="lineNum">     201 </span>            : 
+<span class="lineNum">     202 </span><span class="lineCov">         17 :         if(checkForDraw()){</span>
+<span class="lineNum">     203 </span><span class="lineNoCov">          0 :                 gameFinished = true;</span>
+<span class="lineNum">     204 </span><span class="lineNoCov">          0 :                 return;</span>
+<span class="lineNum">     205 </span>            :         }
+<span class="lineNum">     206 </span><span class="lineCov">         17 :         if(checkForMate()){</span>
+<span class="lineNum">     207 </span><span class="lineNoCov">          0 :                 gameFinished = true;</span>
+<span class="lineNum">     208 </span><span class="lineNoCov">          0 :                 return;</span>
+<span class="lineNum">     209 </span>            :         }
+<span class="lineNum">     210 </span><span class="lineCov">         41 :         if(    (cb-&gt;toMove == PlayerColor::White &amp;&amp; checkForCheck(PlayerColor::Black))</span>
+<span class="lineNum">     211 </span><span class="lineCov">         34 :                 || (cb-&gt;toMove == PlayerColor::Black &amp;&amp; checkForCheck(PlayerColor::White))){</span>
+<span class="lineNum">     212 </span><span class="lineNoCov">          0 :                 undoMove();</span>
+<span class="lineNum">     213 </span>            :         }
+<span class="lineNum">     214 </span>            : }
+<a name="215"><span class="lineNum">     215 </span>            : </a>
+<span class="lineNum">     216 </span>            : 
+<span class="lineNum">     217 </span><span class="lineCov">         17 : void Game::playMove(Move* move){</span>
+<span class="lineNum">     218 </span>            :         // don't play moves if the game is finished
+<span class="lineNum">     219 </span><span class="lineCov">         17 :         if(gameFinished)</span>
+<span class="lineNum">     220 </span><span class="lineNoCov">          0 :                 return;</span>
+<span class="lineNum">     221 </span>            : 
+<span class="lineNum">     222 </span>            :         // deselect field
+<span class="lineNum">     223 </span><span class="lineCov">         17 :         selected = false;</span>
+<span class="lineNum">     224 </span>            : 
+<span class="lineNum">     225 </span>            :         // if the selected move is legal for the selected piece...
+<span class="lineNum">     226 </span><span class="lineCov">         34 :         if(move-&gt;moving-&gt;checkIfLegal(*move-&gt;dest, *cb)</span>
+<span class="lineNum">     227 </span>            :            // and the piece seleced belongs to the player whose turn it is
+<span class="lineNum">     228 </span><span class="lineCov">         17 :            &amp;&amp; cb-&gt;toMove == move-&gt;moving-&gt;getColor()){</span>
+<span class="lineNum">     229 </span>            : 
+<span class="lineNum">     230 </span>            :                 // move a piece from from to dest
+<span class="lineNum">     231 </span><span class="lineCov">         13 :                 cb-&gt;board[move-&gt;from-&gt;file][move-&gt;from-&gt;rank] = nullptr;</span>
+<span class="lineNum">     232 </span><span class="lineCov">         26 :                 cb-&gt;board[move-&gt;dest-&gt;file][move-&gt;dest-&gt;rank] = </span>
+<span class="lineNum">     233 </span><span class="lineCov">         52 :                         move-&gt;moving-&gt;movedPiece(move-&gt;moving-&gt;getColor(), </span>
+<span class="lineNum">     234 </span><span class="lineCov">         26 :                                            new Field(move-&gt;dest-&gt;file,move-&gt;dest-&gt;rank));</span>
+<span class="lineNum">     235 </span>            : 
+<span class="lineNum">     236 </span>            :                 // indicate that the piece was moved (for castling)
+<span class="lineNum">     237 </span><span class="lineCov">         13 :                 cb-&gt;board[move-&gt;dest-&gt;file][move-&gt;dest-&gt;rank]-&gt;inStartingPos = false;</span>
+<span class="lineNum">     238 </span>            : 
+<span class="lineNum">     239 </span>            :                 // update which fields are attacked on the chessboard
+<span class="lineNum">     240 </span><span class="lineCov">         13 :                 cb-&gt;updateAttacked();</span>
+<span class="lineNum">     241 </span>            : 
+<span class="lineNum">     242 </span>            :                 // add the move into the move history
+<span class="lineNum">     243 </span><span class="lineCov">         13 :                 moveHistory.push_back(move);</span>
+<span class="lineNum">     244 </span>            : 
+<span class="lineNum">     245 </span>            :                 // update info for draw conditions
+<span class="lineNum">     246 </span><span class="lineCov">         13 :                 if(typeid(*move-&gt;moving) != typeid(Pawn))</span>
+<span class="lineNum">     247 </span><span class="lineCov">          8 :                         movesSinceCapturePawnMove++;</span>
+<span class="lineNum">     248 </span>            :                 else
+<span class="lineNum">     249 </span><span class="lineCov">          5 :                         movesSinceCapturePawnMove = 0;</span>
+<span class="lineNum">     250 </span>            : 
+<span class="lineNum">     251 </span>            :                 // switch whose turn it is
+<span class="lineNum">     252 </span><span class="lineCov">         13 :                 if(cb-&gt;toMove == PlayerColor::White){</span>
+<span class="lineNum">     253 </span><span class="lineCov">          7 :                         cb-&gt;toMove = PlayerColor::Black;</span>
+<span class="lineNum">     254 </span>            :                 }
+<span class="lineNum">     255 </span><span class="lineCov">          6 :                 else if(cb-&gt;toMove == PlayerColor::Black){</span>
+<span class="lineNum">     256 </span><span class="lineCov">          6 :                         cb-&gt;toMove = PlayerColor::White;</span>
+<span class="lineNum">     257 </span>            :                 }
+<span class="lineNum">     258 </span>            :         }
+<span class="lineNum">     259 </span>            :         else{
+<span class="lineNum">     260 </span>            :                 //the move is illegal and won't be played
+<span class="lineNum">     261 </span>            :         }
+<a name="262"><span class="lineNum">     262 </span>            : }</a>
+<span class="lineNum">     263 </span>            : 
+<span class="lineNum">     264 </span><span class="lineCov">         17 : void Game::playMove(Field* dest, ChessPiece* moving){</span>
+<span class="lineNum">     265 </span>            :         // don't play moves if the game is finished
+<span class="lineNum">     266 </span><span class="lineCov">         17 :         if(gameFinished)</span>
+<span class="lineNum">     267 </span><span class="lineNoCov">          0 :                 return;</span>
+<span class="lineNum">     268 </span>            : 
+<span class="lineNum">     269 </span>            :         // otherwise call the above function
+<span class="lineNum">     270 </span>            :         // overloaded for convenience
+<span class="lineNum">     271 </span><span class="lineCov">         17 :         Move* move = new Move(dest, moving, *cb);</span>
+<span class="lineNum">     272 </span><span class="lineCov">         17 :         playMove(move);</span>
+<span class="lineNum">     273 </span>            : }
+<span class="lineNum">     274 </span>            : 
+<a name="275"><span class="lineNum">     275 </span>            : </a>
+<span class="lineNum">     276 </span>            : 
+<span class="lineNum">     277 </span><span class="lineNoCov">          0 : Move Game::undoMove(void){</span>
+<span class="lineNum">     278 </span>            :         // if you're undoing the move that finished the game
+<span class="lineNum">     279 </span>            :         // uh, &quot;unfinish&quot; it
+<span class="lineNum">     280 </span><span class="lineNoCov">          0 :         if(gameFinished)</span>
+<span class="lineNum">     281 </span><span class="lineNoCov">          0 :                 gameFinished = false;</span>
+<span class="lineNum">     282 </span>            : 
+<span class="lineNum">     283 </span>            :         // if there are moves in move history
+<span class="lineNum">     284 </span><span class="lineNoCov">          0 :         if(!moveHistory.empty()){</span>
+<span class="lineNum">     285 </span>            :                 // get the last move
+<span class="lineNum">     286 </span><span class="lineNoCov">          0 :                 Move* move = moveHistory.back();</span>
+<span class="lineNum">     287 </span>            : 
+<span class="lineNum">     288 </span>            :                 //switch things back
+<span class="lineNum">     289 </span><span class="lineNoCov">          0 :                 cb-&gt;board[move-&gt;from-&gt;file][move-&gt;from-&gt;rank] = move-&gt;moving;</span>
+<span class="lineNum">     290 </span><span class="lineNoCov">          0 :                 cb-&gt;board[move-&gt;dest-&gt;file][move-&gt;dest-&gt;rank] = move-&gt;eaten;</span>
+<span class="lineNum">     291 </span><span class="lineNoCov">          0 :                 move-&gt;moving-&gt;field = new Field(move-&gt;from-&gt;file,move-&gt;from-&gt;rank);</span>
+<span class="lineNum">     292 </span>            :                 
+<span class="lineNum">     293 </span>            :                 //TODO: inStartingPos isn't updated here
+<span class="lineNum">     294 </span>            :                 
+<span class="lineNum">     295 </span>            :                 // update fields which are attacked
+<span class="lineNum">     296 </span><span class="lineNoCov">          0 :                 cb-&gt;updateAttacked();</span>
+<span class="lineNum">     297 </span>            : 
+<span class="lineNum">     298 </span>            :                 // delete the last move from history after undoing it
+<span class="lineNum">     299 </span><span class="lineNoCov">          0 :                 moveHistory.pop_back();</span>
+<span class="lineNum">     300 </span>            : 
+<span class="lineNum">     301 </span>            :                 // switch the player whose turn it is
+<span class="lineNum">     302 </span><span class="lineNoCov">          0 :                 if(cb-&gt;toMove == PlayerColor::White){</span>
+<span class="lineNum">     303 </span><span class="lineNoCov">          0 :                         cb-&gt;toMove = PlayerColor::Black;</span>
+<span class="lineNum">     304 </span>            :                 }
+<span class="lineNum">     305 </span><span class="lineNoCov">          0 :                 else if(cb-&gt;toMove == PlayerColor::Black){</span>
+<span class="lineNum">     306 </span><span class="lineNoCov">          0 :                         cb-&gt;toMove = PlayerColor::White;</span>
+<span class="lineNum">     307 </span>            :                 }
+<span class="lineNum">     308 </span>            :         }
+<a name="309"><span class="lineNum">     309 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     310 </span>            : 
+<span class="lineNum">     311 </span><span class="lineCov">         17 : void Game::selectField(){</span>
+<span class="lineNum">     312 </span>            :         // don't let the player select a field if the game is finished
+<span class="lineNum">     313 </span><span class="lineCov">         17 :         if(gameFinished)</span>
+<span class="lineNum">     314 </span><span class="lineNoCov">          0 :                 return;</span>
+<span class="lineNum">     315 </span>            : 
+<span class="lineNum">     316 </span>            :         // if the selected field isn't empty
+<span class="lineNum">     317 </span><span class="lineCov">         34 :         if(cb-&gt;board[selFieldFile][selFieldRank] != nullptr</span>
+<span class="lineNum">     318 </span>            :            // and the piece on the field belongs to the player whose turn it is
+<span class="lineNum">     319 </span><span class="lineCov">         17 :            &amp;&amp; cb-&gt;board[selFieldFile][selFieldRank]-&gt;getColor() == cb-&gt;toMove){</span>
+<span class="lineNum">     320 </span>            :                         // select the field and change accompanying global info
+<span class="lineNum">     321 </span><span class="lineCov">         17 :                         selected = true;</span>
+<span class="lineNum">     322 </span><span class="lineCov">         17 :                         selFile = selFieldFile;</span>
+<span class="lineNum">     323 </span><span class="lineCov">         17 :                         selRank = selFieldRank;</span>
+<span class="lineNum">     324 </span>            :         }
+<span class="lineNum">     325 </span>            : }
+<span class="lineNum">     326 </span>            : 
+<a name="327"><span class="lineNum">     327 </span>            : /* If a piece is currently selected, then the player is picking which move</a>
+<span class="lineNum">     328 </span>            :    to play with it. Otherwise, he's still selecting a piece to play with. */
+<span class="lineNum">     329 </span><span class="lineCov">         34 : bool Game::pickingMove(){</span>
+<span class="lineNum">     330 </span><span class="lineCov">         34 :         return selected;</span>
+<span class="lineNum">     331 </span>            : }
+<span class="lineNum">     332 </span>            : 
+<span class="lineNum">     333 </span>            : 
+<a name="334"><span class="lineNum">     334 </span>            : /* DISPLAY */</a>
+<span class="lineNum">     335 </span>            : 
+<span class="lineNum">     336 </span><span class="lineCov">        176 : void Game::display(int file, int rank){</span>
+<span class="lineNum">     337 </span>            : 
+<span class="lineNum">     338 </span>            :         // print chessboard
+<span class="lineNum">     339 </span><span class="lineCov">        176 :         cb-&gt;display(file, rank, selected, selFile, selRank);</span>
+<span class="lineNum">     340 </span>            : 
+<span class="lineNum">     341 </span>            :         // print pieces on the chessboard
+<span class="lineNum">     342 </span><span class="lineCov">       1584 :         for(int i=0; i&lt;8; i++){</span>
+<span class="lineNum">     343 </span><span class="lineCov">      12672 :                 for(int j=0; j&lt;8; j++){</span>
+<span class="lineNum">     344 </span><span class="lineCov">      11264 :                         if(cb-&gt;board[i][j] != nullptr &amp;&amp; cb-&gt;board[i][j]-&gt;onBoard){</span>
+<span class="lineNum">     345 </span><span class="lineCov">       5632 :                                 cb-&gt;board[i][j]-&gt;display(i,j);</span>
+<span class="lineNum">     346 </span>            :                         }
+<a name="347"><span class="lineNum">     347 </span>            :                 }</a>
+<span class="lineNum">     348 </span>            :         }
+<span class="lineNum">     349 </span><span class="lineCov">        179 : }</span>
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

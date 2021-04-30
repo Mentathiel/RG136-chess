@@ -1,0 +1,250 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage.info - RG136-chess/main.cc</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">RG136-chess</a> - main.cc<span style="font-size: 80%;"> (source / <a href="main.cc.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">79</td>
+            <td class="headerCovTableEntry">85</td>
+            <td class="headerCovTableEntryHi">92.9 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2021-04-30 13:25:06</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">7</td>
+            <td class="headerCovTableEntry">7</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : #include &quot;chess.hpp&quot;</a>
+<span class="lineNum">       2 </span>            : 
+<span class="lineNum">       3 </span>            : /* Declaring callback functions */
+<span class="lineNum">       4 </span>            : static void onDisplay(void);
+<span class="lineNum">       5 </span>            : static void onKeyboard(unsigned char key, int x, int y);
+<span class="lineNum">       6 </span>            : static void onSpecialKey(int key, int x, int y);
+<span class="lineNum">       7 </span>            : static void onReshape(int width, int height);
+<span class="lineNum">       8 </span>            : 
+<span class="lineNum">       9 </span>            : /* Global game variables */
+<span class="lineNum">      10 </span>            : Game* game;
+<span class="lineNum">      11 </span>            : int selFieldFile = 0;
+<span class="lineNum">      12 </span>            : int selFieldRank = 0;
+<span class="lineNum">      13 </span>            : 
+<span class="lineNum">      14 </span>            : /* Global GLUT variables */
+<span class="lineNum">      15 </span>            : int winWidth = 1280;
+<a name="16"><span class="lineNum">      16 </span>            : int winHeight = 720;</a>
+<span class="lineNum">      17 </span>            : 
+<span class="lineNum">      18 </span><span class="lineCov">          1 : int main(int argc, char **argv)</span>
+<span class="lineNum">      19 </span>            : {
+<span class="lineNum">      20 </span>            :     /* Starting a New Game */
+<span class="lineNum">      21 </span><span class="lineCov">          1 :     game = new Game();</span>
+<span class="lineNum">      22 </span>            : 
+<span class="lineNum">      23 </span>            :     /* Initializing GLUT. */
+<span class="lineNum">      24 </span><span class="lineCov">          1 :     glutInit(&amp;argc, argv);</span>
+<span class="lineNum">      25 </span><span class="lineCov">          1 :     glEnable(GL_DEPTH_TEST);</span>
+<span class="lineNum">      26 </span><span class="lineCov">          1 :     glEnable(GL_NORMALIZE);</span>
+<span class="lineNum">      27 </span><span class="lineCov">          1 :     glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);</span>
+<span class="lineNum">      28 </span><span class="lineCov">          1 :     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);</span>
+<span class="lineNum">      29 </span>            : 
+<span class="lineNum">      30 </span>            :     /* Creating a window. */
+<span class="lineNum">      31 </span><span class="lineCov">          1 :     glutInitWindowSize(winWidth, winHeight);</span>
+<span class="lineNum">      32 </span><span class="lineCov">          1 :     glutInitWindowPosition(0, 0);</span>
+<span class="lineNum">      33 </span><span class="lineCov">          1 :     glutCreateWindow(argv[0]);</span>
+<span class="lineNum">      34 </span>            : 
+<span class="lineNum">      35 </span>            :     /* Registering callback functions. */
+<span class="lineNum">      36 </span><span class="lineCov">          1 :     glutDisplayFunc(onDisplay);</span>
+<span class="lineNum">      37 </span><span class="lineCov">          1 :     glutKeyboardFunc(onKeyboard);</span>
+<span class="lineNum">      38 </span><span class="lineCov">          1 :     glutSpecialFunc(onSpecialKey);</span>
+<span class="lineNum">      39 </span><span class="lineCov">          1 :     glutReshapeFunc(onReshape);</span>
+<span class="lineNum">      40 </span>            : 
+<span class="lineNum">      41 </span>            :     /* Initializing clear color. */
+<span class="lineNum">      42 </span><span class="lineCov">          1 :     glClearColor(0.75, 0.75, 0.75, 0);</span>
+<span class="lineNum">      43 </span>            : 
+<span class="lineNum">      44 </span>            :     /* Initializing light &amp; materials. */
+<span class="lineNum">      45 </span><span class="lineCov">          1 :     GLfloat light_ambient[] = { 0.4, 0.4, 0.4, 1 };</span>
+<span class="lineNum">      46 </span><span class="lineCov">          1 :     GLfloat light_diffuse[] = { 0.3, 0.3, 0.3, 1 };</span>
+<span class="lineNum">      47 </span><span class="lineCov">          1 :     GLfloat light_specular[] = { 0.5, 0.5, 0.5, 1 };</span>
+<span class="lineNum">      48 </span>            : 
+<span class="lineNum">      49 </span><span class="lineCov">          1 :     GLfloat light_position[] = { -20, 0, -600, 0 };</span>
+<span class="lineNum">      50 </span>            : 
+<span class="lineNum">      51 </span><span class="lineCov">          1 :     glEnable(GL_LIGHTING);</span>
+<span class="lineNum">      52 </span><span class="lineCov">          1 :     glEnable(GL_LIGHT0);</span>
+<span class="lineNum">      53 </span><span class="lineCov">          1 :     glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);</span>
+<span class="lineNum">      54 </span><span class="lineCov">          1 :     glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);</span>
+<span class="lineNum">      55 </span><span class="lineCov">          1 :     glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);</span>
+<span class="lineNum">      56 </span><span class="lineCov">          1 :     glLightfv(GL_LIGHT0, GL_POSITION, light_position);</span>
+<span class="lineNum">      57 </span><span class="lineCov">          1 :     glLightModeli(GL_LIGHT_MODEL_AMBIENT,1);</span>
+<span class="lineNum">      58 </span>            :     
+<span class="lineNum">      59 </span>            : 
+<span class="lineNum">      60 </span>            :     /* The program is entering the main loop. */
+<span class="lineNum">      61 </span><span class="lineCov">          1 :     glutMainLoop();</span>
+<span class="lineNum">      62 </span>            : 
+<span class="lineNum">      63 </span><span class="lineNoCov">          0 :     return 0;</span>
+<a name="64"><span class="lineNum">      64 </span>            : }</a>
+<span class="lineNum">      65 </span>            : 
+<span class="lineNum">      66 </span><span class="lineCov">        176 : static void onDisplay(void)</span>
+<span class="lineNum">      67 </span>            : {
+<span class="lineNum">      68 </span>            :     /* Setting Clear Color and Depth */
+<span class="lineNum">      69 </span><span class="lineCov">        176 :     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);</span>
+<span class="lineNum">      70 </span>            : 
+<span class="lineNum">      71 </span>            :      /* Set the viewport. */
+<span class="lineNum">      72 </span><span class="lineCov">        176 :     glViewport(0, 0, winWidth, winHeight);</span>
+<span class="lineNum">      73 </span>            : 
+<span class="lineNum">      74 </span>            :     /*  Setting up perspective and camera */
+<span class="lineNum">      75 </span><span class="lineCov">        176 :     glMatrixMode(GL_PROJECTION);</span>
+<span class="lineNum">      76 </span><span class="lineCov">        176 :     glLoadIdentity();</span>
+<span class="lineNum">      77 </span><span class="lineCov">        176 :     gluPerspective(</span>
+<span class="lineNum">      78 </span>            :         60,
+<span class="lineNum">      79 </span><span class="lineCov">        176 :         winWidth/(float)winHeight,</span>
+<span class="lineNum">      80 </span>            :         0, 25);
+<span class="lineNum">      81 </span><span class="lineCov">        176 :     glOrtho(-100.0f, 100.0f, -100.0f, 100.0f, -100.0f, 100.0f);</span>
+<span class="lineNum">      82 </span><span class="lineCov">        176 :     glMatrixMode(GL_MODELVIEW);</span>
+<span class="lineNum">      83 </span><span class="lineCov">        176 :     glLoadIdentity();</span>
+<span class="lineNum">      84 </span>            : 
+<span class="lineNum">      85 </span><span class="lineCov">        176 :     gluLookAt(</span>
+<span class="lineNum">      86 </span>            :         0, 0, 1,
+<span class="lineNum">      87 </span>            :         0, 0, 0,
+<span class="lineNum">      88 </span>            :         0, 1, 0
+<span class="lineNum">      89 </span>            :     );
+<span class="lineNum">      90 </span>            : 
+<span class="lineNum">      91 </span>            :     /* This is where the magic happens */
+<span class="lineNum">      92 </span><span class="lineCov">        176 :     game-&gt;display(selFieldFile, selFieldRank);</span>
+<span class="lineNum">      93 </span>            : 
+<span class="lineNum">      94 </span>            : 
+<span class="lineNum">      95 </span>            :     /* Swap Buffer with the new one */
+<span class="lineNum">      96 </span><span class="lineCov">        176 :     glutSwapBuffers();</span>
+<a name="97"><span class="lineNum">      97 </span><span class="lineCov">        176 : }</span></a>
+<span class="lineNum">      98 </span>            : 
+<span class="lineNum">      99 </span><span class="lineCov">         34 : static void onKeyboard(unsigned char key, int x, int y)</span>
+<span class="lineNum">     100 </span>            : {
+<span class="lineNum">     101 </span>            :     /* If the game is finished (either by draw or one side winning) 
+<span class="lineNum">     102 </span>            :        this creates a new game on any input. */
+<span class="lineNum">     103 </span><span class="lineCov">         34 :     if(game-&gt;gameFinished){</span>
+<span class="lineNum">     104 </span><span class="lineNoCov">          0 :         delete game;</span>
+<span class="lineNum">     105 </span><span class="lineNoCov">          0 :         game = new Game();</span>
+<span class="lineNum">     106 </span>            :     }
+<span class="lineNum">     107 </span>            : 
+<span class="lineNum">     108 </span>            :     /* Check key */
+<span class="lineNum">     109 </span><span class="lineCov">         34 :     switch (key) {</span>
+<span class="lineNum">     110 </span>            : 
+<span class="lineNum">     111 </span><span class="lineCov">         34 :         case 13: //enter</span>
+<span class="lineNum">     112 </span>            : 
+<span class="lineNum">     113 </span>            :             // if a piece is selected and we're picking a field to move it to
+<span class="lineNum">     114 </span><span class="lineCov">         34 :             if(game-&gt;pickingMove()){</span>
+<span class="lineNum">     115 </span><span class="lineCov">         17 :                 Field* target = new Field(selFieldFile, selFieldRank);</span>
+<span class="lineNum">     116 </span><span class="lineCov">         17 :                 ChessPiece* mov = game-&gt;cb-&gt;board[game-&gt;selFile][game-&gt;selRank];</span>
+<span class="lineNum">     117 </span><span class="lineCov">         17 :                 game-&gt;playMove(target, mov);</span>
+<span class="lineNum">     118 </span>            :                 //game-&gt;cb-&gt;print();
+<span class="lineNum">     119 </span><span class="lineCov">         17 :                 game-&gt;checkState();</span>
+<span class="lineNum">     120 </span>            :             }
+<span class="lineNum">     121 </span>            :             // if we're selecting a piece
+<span class="lineNum">     122 </span>            :             else{
+<span class="lineNum">     123 </span><span class="lineCov">         17 :                 game-&gt;selectField();</span>
+<span class="lineNum">     124 </span>            :             }
+<span class="lineNum">     125 </span><span class="lineCov">         34 :             break;</span>
+<span class="lineNum">     126 </span>            : 
+<span class="lineNum">     127 </span><span class="lineNoCov">          0 :         case 27: //esc</span>
+<span class="lineNum">     128 </span><span class="lineNoCov">          0 :             exit(0);</span>
+<span class="lineNum">     129 </span>            :             break;
+<span class="lineNum">     130 </span>            :     }
+<span class="lineNum">     131 </span>            : 
+<span class="lineNum">     132 </span>            :     /* Refresh screen because the game state has changed.
+<span class="lineNum">     133 </span>            :        Refreshing here in case additional inputs are added later. */
+<span class="lineNum">     134 </span><span class="lineCov">         34 :     glutPostRedisplay();</span>
+<a name="135"><span class="lineNum">     135 </span><span class="lineCov">         34 : }</span></a>
+<span class="lineNum">     136 </span>            : 
+<span class="lineNum">     137 </span><span class="lineCov">        140 : static void onSpecialKey(int key, int x, int y){</span>
+<span class="lineNum">     138 </span>            :     /* The player can still move around the board, but can't select
+<span class="lineNum">     139 </span>            :        anything anymore. */
+<span class="lineNum">     140 </span><span class="lineCov">        140 :     if(game-&gt;gameFinished)</span>
+<span class="lineNum">     141 </span><span class="lineNoCov">          0 :         return;</span>
+<span class="lineNum">     142 </span>            : 
+<span class="lineNum">     143 </span>            :     /* Selecting fields using arrow keys. */
+<span class="lineNum">     144 </span><span class="lineCov">        140 :     switch (key) {</span>
+<span class="lineNum">     145 </span><span class="lineCov">         30 :         case GLUT_KEY_RIGHT:</span>
+<span class="lineNum">     146 </span><span class="lineCov">         30 :             if(selFieldFile&lt;7)</span>
+<span class="lineNum">     147 </span><span class="lineCov">         30 :                 selFieldFile++;</span>
+<span class="lineNum">     148 </span><span class="lineCov">         30 :             break;</span>
+<span class="lineNum">     149 </span><span class="lineCov">         26 :         case GLUT_KEY_LEFT:</span>
+<span class="lineNum">     150 </span><span class="lineCov">         26 :             if(selFieldFile&gt;0)</span>
+<span class="lineNum">     151 </span><span class="lineCov">         26 :                 selFieldFile--;</span>
+<span class="lineNum">     152 </span><span class="lineCov">         26 :             break;</span>
+<span class="lineNum">     153 </span><span class="lineCov">         43 :         case GLUT_KEY_UP:</span>
+<span class="lineNum">     154 </span><span class="lineCov">         43 :             if(selFieldRank&lt;7)</span>
+<span class="lineNum">     155 </span><span class="lineCov">         43 :                 selFieldRank++;</span>
+<span class="lineNum">     156 </span><span class="lineCov">         43 :             break;</span>
+<span class="lineNum">     157 </span><span class="lineCov">         41 :         case GLUT_KEY_DOWN:</span>
+<span class="lineNum">     158 </span><span class="lineCov">         41 :             if(selFieldRank&gt;0)</span>
+<span class="lineNum">     159 </span><span class="lineCov">         41 :                 selFieldRank--;</span>
+<span class="lineNum">     160 </span><span class="lineCov">         41 :             break;</span>
+<span class="lineNum">     161 </span>            :     }
+<span class="lineNum">     162 </span>            : 
+<span class="lineNum">     163 </span>            :     /* Refresh screen because the game state has changed.
+<span class="lineNum">     164 </span>            :     Refreshing here in case additional inputs are added later. */
+<span class="lineNum">     165 </span><span class="lineCov">        140 :     glutPostRedisplay();</span>
+<span class="lineNum">     166 </span>            : }
+<span class="lineNum">     167 </span>            : 
+<a name="168"><span class="lineNum">     168 </span>            : /* Proportionally reshape everything when the user rezsizes</a>
+<span class="lineNum">     169 </span>            :    the window. */
+<span class="lineNum">     170 </span><span class="lineCov">          1 : static void onReshape(int width, int height){</span>
+<span class="lineNum">     171 </span><span class="lineCov">          1 :     float ratio = (float)width/height;</span>
+<a name="172"><span class="lineNum">     172 </span><span class="lineCov">          1 :     winWidth = width;</span></a>
+<span class="lineNum">     173 </span><span class="lineCov">          1 :     winHeight = (int)(width/ratio);</span>
+<span class="lineNum">     174 </span><span class="lineCov">          4 : }</span>
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>
